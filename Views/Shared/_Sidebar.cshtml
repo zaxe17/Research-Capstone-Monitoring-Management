@@ -1,0 +1,40 @@
+@model List<monitoring_management.Models.SidebarModel>
+
+<div class="d-flex flex-column flex-shrink-0 p-3 pt-4 text-white h-100"
+     style="background: var(--maroon-900); width: 230px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span class="text-uppercase fw-bold p-2"
+              style="color: var(--gold-500); font-size: 11px; letter-spacing: .12em;">Student module</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto gap-1">
+        @foreach (var item in Model)
+        {
+            <li class="nav-item">
+                <a asp-controller="@item.Folder" asp-action="@item.Action" class="nav-link ps-4 tab-hover" style="font-size: 14px" aria-current="page">
+                    @item.Title
+                </a>
+            </li>
+        }
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1"
+           data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center me-2"
+                 style="width:32px;height:32px;">
+                JD
+            </div>
+            <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+    </div>
+</div>

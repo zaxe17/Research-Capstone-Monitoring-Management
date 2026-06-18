@@ -1,0 +1,30 @@
+<div class="row g-2 mb-4">
+    <div class="col-md-6">
+        <div class="position-relative">
+            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+            <input type="text" class="form-control ps-5" style="font-size: 14px;" placeholder="Search by title, keyword, or author"
+                   id="repoSearch" oninput="filterRepo()">
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <select class="form-select" style="font-size: 14px;" id="repoCategory" onchange="filterRepo()">
+            <option value="">All categories</option>
+            <option>Mobile Application</option>
+            <option>Web Application</option>
+            <option>IoT / Embedded Systems</option>
+            <option>Data Analytics</option>
+            <option>Machine Learning</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <select class="form-select" style="font-size: 14px;" id="repoYear" onchange="filterRepo()">
+            <option value="">All years</option>
+            <option>2026</option>
+            <option>2025</option>
+            <option>2024</option>
+        </select>
+    </div>
+
+</div>

@@ -1,0 +1,79 @@
+@{
+    ViewData["Title"] = "Student Page";
+}
+
+<div class="d-flex w-100 h-100">
+    <partial name="_Sidebar" model="ViewBag.Sidebar" />
+    <main class="flex-grow-1" style="padding: 30px;">
+        @* Header *@
+        <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                 {
+                     ["TabName"] = "My works",
+                     ["Content"] = "Your capstone submissions",
+                     ["Description"] = "Papers where you are listed as a leader or member."
+                 }' />
+
+        <!-- Status -->
+        <div class="mb-4 d-flex justify-content-center gap-2 w-100">
+            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "As leader" })" />
+
+            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "As member" })" />
+
+            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "Pending review" })" />
+
+            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "Approved" })" />
+
+            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "Draft" })" />
+        </div>
+
+        <!-- Table -->
+        <div class="card" style="padding: 0;">
+            <table style="font-size: 13px;">
+                <thead>
+                    <tr>
+                        <th style="font-size: 10px; color: var(--ink-600);">TITLE</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">YOUR ROLE</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">CATEGORY</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">STATUS</th>
+                        <th style="font-size: 10px; color: var(--ink-600);"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var paper in ViewBag.Papers)
+                    {
+                        <tr>
+                            <td>
+                                <div class="title-cell">
+                                    @paper.Title
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="tag @(paper.Role == "Leader" ? "leader" : "member")">
+                                    @paper.Role
+                                </span>
+                            </td>
+
+                            <td>
+                                @paper.Category
+                            </td>
+
+                            <td>
+                                <span class="badge approved">
+                                    <i class="ti ti-check"></i> @paper.Status
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn ghost sm" style="font-size: 12px;" onclick="showView('paperDetails')">
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

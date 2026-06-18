@@ -1,0 +1,13 @@
+@model monitoring_management.Models.StatCardModel
+
+<div class="stat rounded-4 bg-white w-100" style="padding: 16px; border: 1px solid var(--line);">
+    <div class="d-flex justify-content-center align-items-center row text-center text-capitalize">
+        <span class="num">
+            @Model.Number
+        </span>
+
+        <span class="lbl">
+            @Model.Label
+        </span>
+    </div>
+</div>

@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
+:root {
+    --maroon-900: #3a0510;
+    --maroon-800: #560a1b;
+    --maroon-700: #7a0e26;
+    --maroon-600: #8e1430;
+    --maroon-500: #a8203e;
+    --maroon-100: #f6e3e8;
+    --maroon-50: #fbf0f2;
+    --gold-700: #a9791a;
+    --gold-600: #c9952c;
+    --gold-500: #e0ab3e;
+    --gold-400: #f0c25c;
+    --gold-100: #fbf0d6;
+    --gold-50: #fdf8ec;
+    --cream: #fbf7ef;
+    --paper: #ffffff;
+    --ink-900: #241a14;
+    --ink-600: #6e5f55;
+    --ink-300: #cdc2b6;
+    --line: #e7ddcf;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --font-display: 'Source Serif 4', 'Georgia', serif;
+    --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--cream);
+}
+
+.form-floating>.form-control-plaintext::placeholder,
+.form-floating>.form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating>.form-control-plaintext:focus::placeholder,
+.form-floating>.form-control:focus::placeholder {
+    text-align: start;
+}
+
+.tab-hover {
+    color: #fff;
+}
+
+.tab-hover:hover {
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+}
+
+.tab-hover.active-tab {
+    color: var(--maroon-900);
+    background: var(--gold-500);
+}
+
+.form-control:focus,
+.form-select:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--maroon-600) !important;
+    box-shadow: 0 0 0 3px var(--maroon-100) !important;
+    outline: none;
+}
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+th {
+    text-align: left;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-600);
+    font-weight: 700;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--maroon-100);
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: var(--maroon-50);
+}
+
+.title-cell {
+    font-weight: 600;
+    color: var(--ink-900);
+    cursor: pointer;
+}
+
+.title-cell:hover {
+    color: var(--maroon-700);
+    text-decoration: underline;
+}
+
+.sub-cell {
+    font-size: 12px;
+    color: var(--ink-600);
+    margin-top: 2px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.badge.approved {
+    background: #eaf3de;
+    color: #27500a;
+}
+
+.badge.pending {
+    background: var(--gold-100);
+    color: var(--gold-700);
+}
+
+.badge.rejected {
+    background: #fcebeb;
+    color: #a32d2d;
+}
+
+.badge i {
+    font-size: 13px;
+}
+
+.tag {
+    display: inline-flex;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 6px;
+    margin: 2px 4px 2px 0;
+}
+
+.tag.leader {
+    background: var(--maroon-100);
+    color: var(--maroon-700);
+}
+
+.tag.member {
+    background: var(--gold-100);
+    color: var(--gold-700);
+}
+
+.cat-pill {
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 6px;
+    background: var(--gold-100);
+    color: var(--gold-700);
+    border: 1px solid var(--gold-500);
+}
+
+.btn.ghost {
+    background: transparent;
+    color: var(--maroon-800);
+    border-color: var(--line);
+}
+
+.btn.ghost:hover {
+    background: var(--maroon-50);
+    border-color: var(--maroon-700);
+}
+
+.stat .num {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--maroon-800);
+}
+
+.stat .lbl {
+    font-size: 12.5px;
+    color: var(--ink-600);
+    margin-top: 2px;
+}

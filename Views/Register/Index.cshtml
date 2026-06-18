@@ -1,0 +1,101 @@
+@{
+    ViewData["Title"] = "Sign in Page";
+}
+
+<section class="container vh-100">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="bg-white" style="border-radius: 1rem;">
+                    <div class="row g-0">
+
+                        <!-- Left Image -->
+                        <div class="col-md-6 col-lg-5 d-none d-md-block">
+                            <img src="https://img.magnific.com/free-photo/smiley-men-discussing-eco-project-close-up_23-2148920597.jpg?semt=ais_hybrid&w=740&q=80"
+                                 alt="Login Form" class="img-fluid h-100"
+                                 style="border-radius: 1rem 0 0 1rem; object-fit: cover;">
+                        </div>
+
+                        <!-- Right Form -->
+                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                            <div class="card-body p-4 p-lg-5 text-black">
+
+                                <form method="post">
+
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="h2 fw-bold mb-0">Research & Capstone Monitoring Management</span>
+                                    </div>
+
+                                    <h5 class="fw-normal mb-4" style="letter-spacing: 1px;">
+                                        Create your account
+                                    </h5>
+
+                                    <div class="input-group-sm mb-3">
+                                        <label for="email" class="form-label">
+                                            Student Number
+                                        </label>
+                                        <input type="email" id="email" name="email" class="form-control form-control-lg"
+                                               style="font-size: 12px;" required>
+                                    </div>
+
+                                    <div class="row g-2">
+
+                                        <!-- First Name -->
+                                        <div class="col-md-4 input-group-sm mb-3">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" id="firstName" name="firstName"
+                                                   class="form-control form-control-lg" style="font-size: 12px;" required>
+                                        </div>
+
+                                        <!-- Middle Name -->
+                                        <div class="col-md-4 input-group-sm mb-3">
+                                            <label for="middleName" class="form-label">Middle Name</label>
+                                            <input type="text" id="middleName" name="middleName"
+                                                   class="form-control form-control-lg" style="font-size: 12px;">
+                                        </div>
+
+                                        <!-- Last Name -->
+                                        <div class="col-md-4 input-group-sm mb-3">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" id="lastName" name="lastName"
+                                                   class="form-control form-control-lg" style="font-size: 12px;" required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="input-group-sm mb-3">
+                                        <label for="password" class="form-label">
+                                            Password
+                                        </label>
+                                        <input type="password" id="password" name="password"
+                                               class="form-control form-control-lg" style="font-size: 12px;" required>
+                                    </div>
+
+                                    <div class="input-group-sm mb-4">
+                                        <label for="password" class="form-label">
+                                            Confirm Password
+                                        </label>
+                                        <input type="password" id="password" name="password"
+                                               class="form-control form-control-lg" style="font-size: 12px;" required>
+                                    </div>
+
+                                    
+                                    <div class="d-grid mb-3">
+                                        <button class="btn btn-dark btn-lg" type="submit">
+                                            Sign Up
+                                        </button>
+                                    </div>
+
+                                    <p class="mt-4 mb-2">
+                                        Don't have an account?
+                                        <a asp-controller="Login" asp-action="Index">Sign In</a>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

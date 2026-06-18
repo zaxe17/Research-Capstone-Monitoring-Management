@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Login Page";
+}
+
+<section class="container vh-100">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="bg-white" style="border-radius: 1rem;">
+                    <div class="row g-0">
+
+                        <!-- Left Image -->
+                        <div class="col-md-6 col-lg-5 d-none d-md-block">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2eouqKWZjUYrJeUykUfhbwENohLkvIG4ap_MCA1cMn0f5DBSQHQvGf3Y&s=10"
+                                 alt="Login Form" class="img-fluid h-100"
+                                 style="border-radius: 1rem 0 0 1rem; object-fit: cover;">
+                        </div>
+
+                        <!-- Right Form -->
+                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                            <div class="card-body p-4 p-lg-5 text-black">
+
+                                <form method="post">
+
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="h2 fw-bold mb-0">Research & Capstone Monitoring Management</span>
+                                    </div>
+
+                                    <h5 class="fw-normal mb-4" style="letter-spacing: 1px;">
+                                        Sign in to your account
+                                    </h5>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">
+                                            Email Address
+                                        </label>
+                                        <input type="email" id="email" name="email" class="form-control form-control-lg"
+                                               required>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="password" class="form-label">
+                                            Password
+                                        </label>
+                                        <input type="password" id="password" name="password"
+                                               class="form-control form-control-lg" required>
+                                    </div>
+
+                                    <div class="d-grid mb-3">
+                                        <button class="btn btn-dark btn-lg" type="submit">
+                                            Login
+                                        </button>
+                                    </div>
+
+                                    <a class="small text-muted">
+                                        Forgot password?
+                                    </a>
+
+                                    <p class="mt-4 mb-2">
+                                        Don't have an account?
+                                        <a asp-controller="Register" asp-action="Index">Sign Up</a>
+                                    </p>
+
+                                    <div>
+                                        <a class="small text-muted me-2">
+                                            Terms of use
+                                        </a>
+                                        <a class="small text-muted">
+                                            Privacy policy
+                                        </a>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
