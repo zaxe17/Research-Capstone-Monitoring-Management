@@ -300,3 +300,4 @@ D:\Projects\.net\monitoring_management\bin\Debug\net10.0\zh-Hant\Microsoft.CodeA
 D:\Projects\.net\monitoring_management\obj\Debug\net10.0\monitoring_management.csproj.AssemblyReference.cache
 D:\Projects\.net\monitoring_management\obj\Debug\net10.0\monitori.71E5EEE0.Up2Date
 D:\Projects\.net\monitoring_management\obj\Debug\net10.0\compressed\tzj6j06uh0-{0}-9js8769asb-9js8769asb.gz
+D:\Projects\.net\monitoring_management\obj\Debug\net10.0\monitoring_management.sourcelink.json
