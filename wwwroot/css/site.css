@@ -189,6 +189,7 @@ tbody tr:hover {
     margin: 2px 4px 2px 0;
 }
 
+.tag.keywords,
 .tag.leader {
     background: var(--maroon-100);
     color: var(--maroon-700);
