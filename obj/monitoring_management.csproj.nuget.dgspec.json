@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj": {}
+    "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj": {
+    "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj",
+        "projectUniqueName": "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj",
         "projectName": "monitoring_management",
-        "projectPath": "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj",
-        "packagesPath": "C:\\Users\\A\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\.net\\monitoring_management\\obj\\",
+        "projectPath": "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\ADET\\Research-Capstone-Monitoring-Management\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\A\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -46,9 +46,17 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[9.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [
