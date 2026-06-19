@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Student Page";
+}
+
+<div class="d-flex w-100 h-100">
+    <partial name="_Sidebar" model="ViewBag.Sidebar" />
+    <main class="flex-grow-1" style="padding: 30px;">
+        @* Header *@
+        <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                 {
+                     ["TabName"] = "Submit research",
+                     ["Content"] = "Upload capstone proposal",
+                     ["Description"] = "Fill in your paper details, add your group members, then submit for admin review."
+                 }' />
+
+<form class="row g-3">
+            <div class="col-lg-7">
+                <div class="card">
+                    <h3 class="" style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
+
+                    <div class="input-group-sm mb-3">
+                        <label class="form-label"
+                               style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Title</label>
+                        <input class="form-control form-control-lg" style="font-size: 12px;">
+                    </div>
+
+                    <div class="input-group-sm mb-3">
+                        <label class="form-label"
+                               style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Description /
+                            abstract</label>
+                            <textarea class="form-control form-control-lg" style="font-size: 12px;"></textarea>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-lg-6 input-group-sm mb-3">
+                                <label class="form-label"
+                                       style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Category</label>
+                                <select class="form-select form-select-lg auth-input">
+                                    <option value="">Select Category</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 input-group-sm mb-3">
+                                <label class="form-label"
+                                       style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Academic
+                                    year</label>
+                                    <select class="form-select form-select-lg auth-input">
+                                        <option value="">Select Academic year</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="d-flex flex-column gap-3">
+                            <div class="card">
+                                <h3 class="" style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
+                                <p class="small-text mb-2">You're added automatically as <strong>Leader</strong>. Search for
+                                    registered students to
+                                    add as members, or type a name for a member without an account — they can be linked later.
+                                </p>
+
+                                <div class="input-group-sm mb-3">
+                                    <label class="form-label"
+                                           style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Add
+                                        member</label>
+                                        <input class="form-control form-control-lg" style="font-size: 12px;"
+                                               placeholder="Search registered students or type a name">
+                                    </div>
+
+                                    <div class="">
+                                        @if (ViewBag.CurrentStudent != null)
+                                        {
+                                            <partial name="_Member_card" model="(Student)ViewBag.CurrentStudent" />
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="card d-flex flex-column gap-2">
+                                    <button class="form-button gold">Submit for review</button>
+
+                                    <button class="form-button ghost">Save as draft</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </main>
+            </div>

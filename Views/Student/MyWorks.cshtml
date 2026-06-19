@@ -15,15 +15,16 @@
 
         <!-- Status -->
         <div class="mb-4 d-flex justify-content-center gap-2 w-100">
-            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "As leader" })" />
-
-            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "As member" })" />
-
-            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "Pending review" })" />
-
-            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "Approved" })" />
-
-            <partial name="_Statcard" model="@(new StatCardModel { Number = 0, Label = "Draft" })" />
+            <partial name="_Statcard"
+                     model="@(new StatCardModel { Number = ViewBag.AsLeader, Label = "As leader" })" />
+            <partial name="_Statcard"
+                     model="@(new StatCardModel { Number = ViewBag.AsMember, Label = "As member" })" />
+            <partial name="_Statcard"
+                     model="@(new StatCardModel { Number = ViewBag.PendingCount, Label = "Pending review" })" />
+            <partial name="_Statcard"
+                     model="@(new StatCardModel { Number = ViewBag.ApprovedCount, Label = "Approved" })" />
+            <partial name="_Statcard"
+                     model="@(new StatCardModel { Number = ViewBag.DraftCount, Label = "Draft" })" />
         </div>
 
         <!-- Table -->

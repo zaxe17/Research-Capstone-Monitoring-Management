@@ -10,7 +10,7 @@ namespace monitoring_management.Services
             {
                 new SidebarModel { Title = "Repository", Folder = "Student", Action = "Index" },
                 new SidebarModel { Title = "My Works", Folder = "Student", Action = "MyWorks" },
-                new SidebarModel { Title = "Submit Research", Folder = "Student", Action = "" },
+                new SidebarModel { Title = "Submit Research", Folder = "Student", Action = "Submit" },
             };
         }
 

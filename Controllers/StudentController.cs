@@ -45,9 +45,7 @@ public class StudentController : Controller
         var studentId = HttpContext.Session.GetString("StudentId");
 
         if (string.IsNullOrEmpty(studentId))
-        {
             return RedirectToAction("Index", "Login");
-        }
 
         var papers = await _context.ResearchMembers
             .Include(m => m.ResearchPaper).ThenInclude(p => p.Category)
@@ -61,8 +59,33 @@ public class StudentController : Controller
             })
             .ToListAsync();
 
+        // i-compute dito sa controller
+        ViewBag.AsLeader = papers.Count(p => p.Role == "Leader");
+        ViewBag.AsMember = papers.Count(p => p.Role == "Member");
+        ViewBag.PendingCount = papers.Count(p => p.Status == "PENDING");
+        ViewBag.ApprovedCount = papers.Count(p => p.Status == "APPROVED");
+        ViewBag.DraftCount = papers.Count(p => p.Status == "DRAFT");
+
         ViewBag.Papers = papers;
         ViewBag.Sidebar = sidebar;
+
+        return View();
+    }
+
+    public async Task<IActionResult> Submit()
+    {
+        var sidebar = SidebarData.StudentMenu();
+        var studentId = HttpContext.Session.GetString("StudentId");
+
+        if (string.IsNullOrEmpty(studentId))
+            return RedirectToAction("Index", "Login");
+
+        var student = await _context.Students
+            .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+        ViewBag.Sidebar = sidebar;
+        ViewBag.CurrentStudent = student;
+        ViewBag.MemberRole = "Leader"; // or dynamic later
 
         return View();
     }
