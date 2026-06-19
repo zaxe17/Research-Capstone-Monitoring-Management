@@ -48,41 +48,49 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-lg-5">
-                        <div class="d-flex flex-column gap-3">
-                            <div class="card">
-                                <h3 class="" style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
-                                <p class="small-text mb-2">You're added automatically as <strong>Leader</strong>. Search for
-                                    registered students to
-                                    add as members, or type a name for a member without an account — they can be linked later.
-                                </p>
-
-                                <div class="input-group-sm mb-3">
-                                    <label class="form-label"
-                                           style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Add
-                                        member</label>
-                                        <input class="form-control form-control-lg" style="font-size: 12px;"
-                                               placeholder="Search registered students or type a name">
-                                    </div>
-
-                                    <div class="">
-                                        @if (ViewBag.CurrentStudent != null)
-                                        {
-                                            <partial name="_Member_card" model="(Student)ViewBag.CurrentStudent" />
-                                        }
-                                    </div>
+                            <div class="input-group-sm mb-3">
+                                <label class="form-label"
+                                       style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Keywords
+                                    (comma-separated)</label>
+                                    <input class="form-control form-control-lg" style="font-size: 12px;">
                                 </div>
 
-                                <div class="card d-flex flex-column gap-2">
-                                    <button class="form-button gold">Submit for review</button>
-
-                                    <button class="form-button ghost">Save as draft</button>
-                                </div>
                             </div>
                         </div>
-                    </form>
-                </main>
-            </div>
+
+                        <div class="col-lg-5">
+                            <div class="d-flex flex-column gap-3">
+                                <div class="card">
+                                    <h3 class="" style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
+                                    <p class="small-text mb-2">You're added automatically as <strong>Leader</strong>. Search for
+                                        registered students to
+                                        add as members, or type a name for a member without an account — they can be linked later.
+                                    </p>
+
+                                    <div class="input-group-sm mb-3">
+                                        <label class="form-label"
+                                               style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Add
+                                            member</label>
+                                            <input class="form-control form-control-lg" style="font-size: 12px;"
+                                                   placeholder="Search registered students or type a name">
+                                        </div>
+
+                                        <div class="">
+                                            @if (ViewBag.CurrentStudent != null)
+                                            {
+                                                <partial name="_Member_card" model="(Student)ViewBag.CurrentStudent" />
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="card d-flex flex-column gap-2">
+                                        <button class="form-button gold">Submit for review</button>
+
+                                        <button class="form-button ghost">Save as draft</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </main>
+                </div>

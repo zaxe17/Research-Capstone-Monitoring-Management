@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Student Page";
+}
+
+<div class="d-flex w-100 h-100">
+    <partial name="_Sidebar" model="ViewBag.Sidebar" />
+    <main class="flex-grow-1" style="padding: 30px;">
+        <div class="row g-3">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="d-flex align-items-center gap-3" style="margin-bottom:14px;">
+                        <span class="cat-pill">
+                            Mobile Application
+                        </span>
+                        <span class="badge approved py-2">
+                            Approved
+                        </span>
+                    </div>
+
+                    <div class="pb-3 mb-3" style="border-bottom: 1px solid var(--line);">
+                        <p class="fw-bold mb-2" style="font-family:var(--font-display); font-size:24px; margin:12px 0 6px; color:var(--maroon-800);">
+                            BeeGuard: A Crowdsourced Mobile Platform for Native Bee Conservation and Honey Traceability in Region I and CAR
+                        </p>
+
+                        <div class="small-text">
+                            <span>Paper ID: RP-2026-0142</span> •
+                            <span>Uploaded April 18, 2026</span> •
+                            <span>Academic Year 2025–2026</span>
+                        </div>
+                    </div>
+
+                    <div class="pb-3 mb-3" style="border-bottom: 1px solid var(--line);">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:8px;">Abstract</h3>
+                        <p class="fw-lighter m-0" style="font-size:14px; color:var(--ink-900);">
+                            This study presents BeeGuard, a mobile application designed to address the decline of native bee populations (Apis cerana and Tetragonula biroi) and the lack of digital infrastructure for apiarists in Region I and the Cordillera Administrative Region. The platform integrates crowdsourced colony reporting, image-based species identification, spatial hive mapping, and a direct-to-consumer marketplace with honey traceability features to combat adulteration.
+                        </p>
+                    </div>
+
+                    <div class="">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:8px;">Keywords</h3>
+                        <div class="d-flex flex-wrap justify-content-start align-items-center">
+                            <div class="tag keywords">apiculture</div>
+                            <div class="tag keywords">native bee conservation</div>
+                            <div class="tag keywords">crowdsourcing</div>
+                            <div class="tag keywords">image processing</div>
+                            <div class="tag keywords">honey traceability</div>
+                            <div class="tag keywords">mobile application</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="d-flex flex-column gap-3">
+                    <div class="card">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Research members</h3>
+
+                        <div>
+                            @if (ViewBag.CurrentStudent != null)
+                            {
+                                <partial name="_Member_card" model="(Student)ViewBag.CurrentStudent" />
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Submission info</h3>
+
+                        <table>
+                            <tr>
+                                <td style="padding:6px 0; color:var(--ink-600);">Adviser</td>
+                                <td style="padding:6px 0; text-align:right;">Dr. Lourdes Banzon</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px 0; color:var(--ink-600);">Date approved</td>
+                                <td style="padding:6px 0; text-align:right;">April 22, 2026</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px 0; color:var(--ink-600);">College</td>
+                                <td style="padding:6px 0; text-align:right;">CCIS</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

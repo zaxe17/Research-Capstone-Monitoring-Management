@@ -329,4 +329,4 @@ D:\Projects\.net\monitoring_management\obj\Debug\net10.0\refint\monitoring_manag
 D:\Projects\.net\monitoring_management\obj\Debug\net10.0\monitoring_management.pdb
 D:\Projects\.net\monitoring_management\obj\Debug\net10.0\monitoring_management.genruntimeconfig.cache
 D:\Projects\.net\monitoring_management\obj\Debug\net10.0\ref\monitoring_management.dll
-D:\Projects\.net\monitoring_management\obj\Debug\net10.0\compressed\tzj6j06uh0-{0}-9wp0o5ajvj-9wp0o5ajvj.gz
+D:\Projects\.net\monitoring_management\obj\Debug\net10.0\compressed\tzj6j06uh0-{0}-kjuw8xwtwx-kjuw8xwtwx.gz
