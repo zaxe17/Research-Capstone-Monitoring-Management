@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace monitoring_management.Models;
 
@@ -36,4 +37,6 @@ public class RegisterViewModel
     [Compare("Password", ErrorMessage = "Passwords do not match")]
     [Display(Name = "Confirm Password")]
     public string ConfirmPassword { get; set; }
+
+    public IEnumerable<SelectListItem>? ProgramList { get; set; }
 }

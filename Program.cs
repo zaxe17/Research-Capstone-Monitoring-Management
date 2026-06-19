@@ -15,6 +15,13 @@ builder.Services.AddSession();
 
 var app = builder.Build();
 
+// Seed academic programs
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    monitoring_management.Data.DbSeeder.SeedPrograms(db);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

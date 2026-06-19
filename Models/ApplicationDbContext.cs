@@ -11,6 +11,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<ResearchPaper> ResearchPapers { get; set; }
     public DbSet<ResearchMember> ResearchMembers { get; set; }
+    public DbSet<AcademicProgram> AcademicPrograms { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,6 +65,12 @@ public class ApplicationDbContext : DbContext
                 .WithMany(s => s.ResearchMembers)
                 .HasForeignKey(x => x.StudentId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<AcademicProgram>(e =>
+        {
+            e.ToTable("academic_programs");
+            e.HasIndex(x => x.Code).IsUnique();
         });
     }
 }

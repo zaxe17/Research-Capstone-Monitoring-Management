@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using monitoring_management.Models;
 
@@ -14,9 +15,13 @@ public class RegisterController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View(new RegisterViewModel());
+        var model = new RegisterViewModel
+        {
+            ProgramList = await GetProgramListAsync()
+        };
+        return View(model);
     }
 
     [HttpPost]
@@ -25,6 +30,7 @@ public class RegisterController : Controller
     {
         if (!ModelState.IsValid)
         {
+            model.ProgramList = await GetProgramListAsync();
             return View(model);
         }
 
@@ -32,6 +38,7 @@ public class RegisterController : Controller
         if (emailExists)
         {
             ModelState.AddModelError("Email", "An account with this email already exists.");
+            model.ProgramList = await GetProgramListAsync();
             return View(model);
         }
 
@@ -39,6 +46,7 @@ public class RegisterController : Controller
         if (studentNoExists)
         {
             ModelState.AddModelError("StudentNo", "This student number is already registered.");
+            model.ProgramList = await GetProgramListAsync();
             return View(model);
         }
 
@@ -62,5 +70,33 @@ public class RegisterController : Controller
 
         TempData["SuccessMessage"] = "Account created successfully. Please sign in.";
         return RedirectToAction("Index", "Login");
+    }
+
+    private async Task<List<SelectListItem>> GetProgramListAsync()
+    {
+        var programs = await _context.AcademicPrograms
+            .OrderBy(p => p.SortOrder)
+            .ToListAsync();
+
+        var groups = new Dictionary<string, SelectListGroup>();
+        var list = new List<SelectListItem>();
+
+        foreach (var p in programs)
+        {
+            if (!groups.TryGetValue(p.CollegeName, out var group))
+            {
+                group = new SelectListGroup { Name = p.CollegeName };
+                groups[p.CollegeName] = group;
+            }
+
+            list.Add(new SelectListItem
+            {
+                Value = p.Code,
+                Text = p.Code,
+                Group = group
+            });
+        }
+
+        return list;
     }
 }
