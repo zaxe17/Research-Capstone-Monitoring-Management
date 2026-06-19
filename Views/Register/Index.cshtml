@@ -1,5 +1,7 @@
+@model monitoring_management.Models.RegisterViewModel
+
 @{
-    ViewData["Title"] = "Sign in Page";
+    ViewData["Title"] = "Registration Page";
 }
 
 <section class="container vh-100">
@@ -20,7 +22,8 @@
                         <div class="col-md-6 col-lg-7 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">
 
-                                <form method="post">
+                                <form asp-controller="Register" asp-action="Index" method="post">
+                                    @Html.AntiForgeryToken()
 
                                     <div class="d-flex align-items-center mb-3">
                                         <span class="h2 fw-bold mb-0">Research & Capstone Monitoring Management</span>
@@ -30,56 +33,73 @@
                                         Create your account
                                     </h5>
 
-                                    <div class="input-group-sm mb-3">
-                                        <label for="email" class="form-label">
-                                            Student Number
-                                        </label>
-                                        <input type="email" id="email" name="email" class="form-control form-control-lg"
-                                               style="font-size: 12px;" required>
+                                    @if (!ViewData.ModelState.IsValid)
+                                    {
+                                        <div class="alert alert-danger py-2" style="font-size: 13px;">
+                                            <div asp-validation-summary="ModelOnly"></div>
+                                        </div>
+                                    }
+
+                                    <div class="row g-2">
+                                        <div class="col-md-6 input-group-sm mb-3">
+                                            <label asp-for="StudentNo" class="form-label">Student Number</label>
+                                            <input asp-for="StudentNo" class="form-control form-control-lg" style="font-size: 12px;">
+                                            <span asp-validation-for="StudentNo" class="text-danger" style="font-size: 11px;"></span>
+                                        </div>
+
+                                        <div class="col-md-6 input-group-sm mb-3">
+                                            <label asp-for="Email" class="form-label">Email Address</label>
+                                            <input asp-for="Email" type="email" class="form-control form-control-lg" style="font-size: 12px;">
+                                            <span asp-validation-for="Email" class="text-danger" style="font-size: 11px;"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2">
+                                        <div class="col-md-4 input-group-sm mb-3">
+                                            <label asp-for="Program" class="form-label">Program</label>
+                                            <select asp-for="Program" class="form-select form-select-lg auth-input" asp-items="Model.ProgramList">
+                                                <option value="">Select program</option>
+                                            </select>
+                                            <span asp-validation-for="Program" class="text-danger auth-error"></span>
+                                        </div>
                                     </div>
 
                                     <div class="row g-2">
 
                                         <!-- First Name -->
                                         <div class="col-md-4 input-group-sm mb-3">
-                                            <label for="firstName" class="form-label">First Name</label>
-                                            <input type="text" id="firstName" name="firstName"
-                                                   class="form-control form-control-lg" style="font-size: 12px;" required>
+                                            <label asp-for="FirstName" class="form-label">First Name</label>
+                                            <input asp-for="FirstName" class="form-control form-control-lg" style="font-size: 12px;">
+                                            <span asp-validation-for="FirstName" class="text-danger" style="font-size: 11px;"></span>
                                         </div>
 
                                         <!-- Middle Name -->
                                         <div class="col-md-4 input-group-sm mb-3">
-                                            <label for="middleName" class="form-label">Middle Name</label>
-                                            <input type="text" id="middleName" name="middleName"
-                                                   class="form-control form-control-lg" style="font-size: 12px;">
+                                            <label asp-for="MiddleName" class="form-label">Middle Name</label>
+                                            <input asp-for="MiddleName" class="form-control form-control-lg" style="font-size: 12px;">
                                         </div>
 
                                         <!-- Last Name -->
                                         <div class="col-md-4 input-group-sm mb-3">
-                                            <label for="lastName" class="form-label">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName"
-                                                   class="form-control form-control-lg" style="font-size: 12px;" required>
+                                            <label asp-for="LastName" class="form-label">Last Name</label>
+                                            <input asp-for="LastName" class="form-control form-control-lg" style="font-size: 12px;">
+                                            <span asp-validation-for="LastName" class="text-danger" style="font-size: 11px;"></span>
                                         </div>
 
                                     </div>
 
                                     <div class="input-group-sm mb-3">
-                                        <label for="password" class="form-label">
-                                            Password
-                                        </label>
-                                        <input type="password" id="password" name="password"
-                                               class="form-control form-control-lg" style="font-size: 12px;" required>
+                                        <label asp-for="Password" class="form-label">Password</label>
+                                        <input asp-for="Password" class="form-control form-control-lg" style="font-size: 12px;">
+                                        <span asp-validation-for="Password" class="text-danger" style="font-size: 11px;"></span>
                                     </div>
 
                                     <div class="input-group-sm mb-4">
-                                        <label for="password" class="form-label">
-                                            Confirm Password
-                                        </label>
-                                        <input type="password" id="password" name="password"
-                                               class="form-control form-control-lg" style="font-size: 12px;" required>
+                                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                                        <input asp-for="ConfirmPassword" class="form-control form-control-lg" style="font-size: 12px;">
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size: 11px;"></span>
                                     </div>
 
-                                    
                                     <div class="d-grid mb-3">
                                         <button class="btn btn-dark btn-lg" type="submit">
                                             Sign Up
@@ -87,7 +107,7 @@
                                     </div>
 
                                     <p class="mt-4 mb-2">
-                                        Don't have an account?
+                                        Already have an account?
                                         <a asp-controller="Login" asp-action="Index">Sign In</a>
                                     </p>
                                 </form>

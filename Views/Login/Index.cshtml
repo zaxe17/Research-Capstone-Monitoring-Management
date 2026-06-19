@@ -1,3 +1,5 @@
+@model monitoring_management.Models.LoginViewModel
+
 @{
     ViewData["Title"] = "Login Page";
 }
@@ -20,7 +22,8 @@
                         <div class="col-md-6 col-lg-7 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">
 
-                                <form method="post">
+                                <form asp-controller="Login" asp-action="Index" method="post">
+                                    @Html.AntiForgeryToken()
 
                                     <div class="d-flex align-items-center mb-3">
                                         <span class="h2 fw-bold mb-0">Research & Capstone Monitoring Management</span>
@@ -30,20 +33,30 @@
                                         Sign in to your account
                                     </h5>
 
+                                    @if (TempData["SuccessMessage"] != null)
+                                    {
+                                        <div class="alert alert-success py-2" style="font-size: 13px;">
+                                            @TempData["SuccessMessage"]
+                                        </div>
+                                    }
+
+                                    @if (!ViewData.ModelState.IsValid)
+                                    {
+                                        <div class="alert alert-danger py-2" style="font-size: 13px;">
+                                            <div asp-validation-summary="ModelOnly"></div>
+                                        </div>
+                                    }
+
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">
-                                            Email Address
-                                        </label>
-                                        <input type="email" id="email" name="email" class="form-control form-control-lg"
-                                               required>
+                                        <label asp-for="Email" class="form-label">Email Address</label>
+                                        <input asp-for="Email" type="email" class="form-control form-control-lg">
+                                        <span asp-validation-for="Email" class="text-danger" style="font-size: 12px;"></span>
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="password" class="form-label">
-                                            Password
-                                        </label>
-                                        <input type="password" id="password" name="password"
-                                               class="form-control form-control-lg" required>
+                                        <label asp-for="Password" class="form-label">Password</label>
+                                        <input asp-for="Password" class="form-control form-control-lg">
+                                        <span asp-validation-for="Password" class="text-danger" style="font-size: 12px;"></span>
                                     </div>
 
                                     <div class="d-grid mb-3">
