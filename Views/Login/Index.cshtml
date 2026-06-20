@@ -49,13 +49,13 @@
 
                                     <div class="mb-3">
                                         <label asp-for="Email" class="form-label">Email Address</label>
-                                        <input asp-for="Email" type="email" class="form-control form-control-lg">
+                                        <input asp-for="Email" type="text" autocomplete="username" class="form-control form-control-lg">
                                         <span asp-validation-for="Email" class="text-danger" style="font-size: 12px;"></span>
                                     </div>
 
                                     <div class="mb-4">
                                         <label asp-for="Password" class="form-label">Password</label>
-                                        <input asp-for="Password" class="form-control form-control-lg">
+                                        <input asp-for="Password" type="password" autocomplete="current-password" class="form-control form-control-lg">
                                         <span asp-validation-for="Password" class="text-danger" style="font-size: 12px;"></span>
                                     </div>
 

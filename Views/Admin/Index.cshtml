@@ -1,3 +1,6 @@
+@using monitoring_management.Models
+@model List<ResearchPaper>
+
 @{
     ViewData["Title"] = "Admin Page";
 }
@@ -13,20 +16,21 @@
                          ["Content"] = "Your capstone submissions",
                          ["Description"] = "Papers where you are listed as a leader or member."
                      }' />
-</div>
+        </div>
 
         <!-- Status -->
         <div class="mb-4 d-flex justify-content-center gap-2 w-100">
-            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Total papers" }' />
-            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Pending review" }' />
-            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Approved" }' />
-            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Rejected" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = (int)ViewBag.TotalPapers, Label = "Total papers" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = (int)ViewBag.PendingCount, Label = "Pending review" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = (int)ViewBag.ApprovedCount, Label = "Approved" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = (int)ViewBag.RejectedCount, Label = "Rejected" }' />
         </div>
 
         <!-- Table -->
-        <h3 style="font-size:14px; font-weight:600;">Pending submissions</h3>
+        @* FIX: "Pending submissions" dati pero lahat na ng status ipinapakita ngayon. *@
+        <h3 style="font-size:14px; font-weight:600;">All submissions</h3>
         <div class="card" style="padding: 0;">
-            <table style="font-size: 13px;">
+            <table style="font-size: 13px;" id="papersTable">
                 <thead>
                     <tr>
                         <th style="font-size: 10px; color: var(--ink-600);">TITLE</th>
@@ -39,46 +43,101 @@
                 </thead>
 
                 <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center small-text py-4">No submissions yet.</td>
+                        </tr>
+                    }
+                    @foreach (var paper in Model)
+                    {
+                        var leader = paper.ResearchMembers.FirstOrDefault(m => m.Role == MemberRole.Leader);
+                        var submittedBy = leader?.MemberName ?? paper.Student?.FullName ?? "—";
 
-                    <tr>
-                        <td>
-                            <div class="title-cell">
-                                HiveTrack: IoT-Based Hive Health Monitoring System
-                            </div>
-                        </td>
+                        // FIX: dynamic na yung badge class base sa actual Status ng paper
+                        // (approved = green, rejected = red, pending = orange).
+                        var statusClass = paper.Status switch
+                        {
+                            PaperStatus.Approved => "approved",
+                            PaperStatus.Rejected => "rejected",
+                            _ => "pending"
+                        };
 
-                        <td>
-                            K. Gamayo
-                        </td>
+                        <tr>
+                            <td>
+                                <div class="title-cell">
+                                    @paper.Title
+                                </div>
+                            </td>
 
-                        <td>
-                            IoT / Embedded Systems
-                        </td>
+                            <td>
+                                @submittedBy
+                            </td>
 
-                        <td>
-                            May 2, 2026
-                        </td>
+                            <td>
+                                @(paper.Category?.CategoryName ?? "Uncategorized")
+                            </td>
 
-                        <td>
-                            <select class="badge approved py-2">
-                                <option value="Approved">Approved</option>
-                                <option value="Rejected">Rejected</option>
-                                <option value="Pending">Pending</option>
-                            </select>
-                        </td>
+                            <td>
+                                @paper.DateUploaded.ToString("MMM d, yyyy")
+                            </td>
 
-                        <td>
-                            @* FIX: dati'y onclick="showView('paperDetails')" — JS function na
-                                   walang depinisyon sa actual app, kaya hindi gumagana ang button.
-                                   Ngayon, totoong link na patungo sa PaperDetails action. *@
-                            <a class="btn ghost sm" style="font-size: 12px;">
-                                View
-                            </a>
-                        </td>
-                    </tr>
+                            <td>
+                                <select class="badge @statusClass py-2 status-select" data-paper-id="@paper.PaperId">
+                                    <option value="Approved" selected="@(paper.Status == PaperStatus.Approved)">Approved</option>
+                                    <option value="Rejected" selected="@(paper.Status == PaperStatus.Rejected)">Rejected</option>
+                                    <option value="Pending" selected="@(paper.Status == PaperStatus.Pending)">Pending</option>
+                                </select>
+                            </td>
 
+                            <td>
+                                @* FIX: dati'y onclick="showView('paperDetails')" na walang depinisyon.
+                                       Ngayon, actual link na papunta sa Admin/Details/{id}. *@
+                                <a class="btn ghost sm" style="font-size: 12px;"
+                                   asp-controller="Admin" asp-action="Details" asp-route-id="@paper.PaperId">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </main>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const table = document.getElementById('papersTable');
+            if (!table) return;
+
+            table.addEventListener('change', async function (e) {
+                const select = e.target.closest('.status-select');
+                if (!select) return;
+
+                const paperId = select.dataset.paperId;
+                const newStatus = select.value;
+                const oldClassMatch = select.className.match(/\b(approved|rejected|pending)\b/);
+                const oldClass = oldClassMatch ? oldClassMatch[0] : 'pending';
+
+                try {
+                    const res = await fetch('/Admin/UpdateStatus', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: paperId, status: newStatus })
+                    });
+
+                    if (!res.ok) throw new Error('Update failed');
+
+                    select.classList.remove(oldClass);
+                    select.classList.add(newStatus.toLowerCase());
+                } catch (err) {
+                    console.error('Status update failed', err);
+                    alert('Hindi na-update ang status. Subukan ulit.');
+                    select.value = oldClass.charAt(0).toUpperCase() + oldClass.slice(1);
+                }
+            });
+        })();
+    </script>
+}
