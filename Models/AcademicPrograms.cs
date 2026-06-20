@@ -1,11 +1,24 @@
-// Models/AcademicProgram.cs
-namespace monitoring_management.Models
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace monitoring_management.Models;
+
+public class AcademicProgram
 {
-    public class AcademicProgram
-    {
-        public int Id { get; set; }
-        public string Code { get; set; } = string.Empty;        // e.g. "BSIT"
-        public string CollegeName { get; set; } = string.Empty; // e.g. "College of Computer and Information Sciences"
-        public int SortOrder { get; set; }                      // controls display order
-    }
+    [Key]
+    [Column("id")]
+    public int Id { get; set; }
+
+    [Column("code")]
+    [Required]
+    [MaxLength(50)]
+    public string Code { get; set; } = string.Empty;
+
+    [Column("college_name")]
+    [Required]
+    [MaxLength(200)]
+    public string CollegeName { get; set; } = string.Empty;
+
+    [Column("sort_order")]
+    public int SortOrder { get; set; }
 }

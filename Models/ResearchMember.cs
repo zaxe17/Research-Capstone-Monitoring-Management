@@ -13,17 +13,17 @@ public class ResearchMember
 {
     [Key]
     [Column("member_id")]
-    [MaxLength(11)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public string MemberId { get; set; }
+    [MaxLength(13)]  // MN-00000001 = 13 chars
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int MemberId { get; set; }
 
     [Column("paper_id")]
     [Required]
-    [MaxLength(11)]
+    [MaxLength(13)]
     public string PaperId { get; set; }
 
     [Column("student_id")]
-    [MaxLength(11)]
+    [MaxLength(13)]  // FK to students(student_id)
     public string? StudentId { get; set; }
 
     [Column("member_name")]

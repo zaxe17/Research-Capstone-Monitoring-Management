@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<ResearchPaper> ResearchPapers { get; set; }
     public DbSet<ResearchMember> ResearchMembers { get; set; }
-    public DbSet<AcademicProgram> AcademicPrograms { get; set; }
+    public DbSet<AcademicProgram> AcademicPrograms { get; set; }  // ← back in
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

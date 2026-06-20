@@ -50,23 +50,20 @@ public class RegisterController : Controller
             return View(model);
         }
 
-        var fullName = string.Join(" ", new[] { model.FirstName, model.MiddleName, model.LastName }
+        var fullName = string.Join(" ",
+            new[] { model.FirstName, model.MiddleName, model.LastName }
             .Where(n => !string.IsNullOrWhiteSpace(n)));
 
-        var student = new Student
-        {
-            // Placeholder only — the MySQL trigger (trg_student_id) overwrites this
-            // unconditionally on INSERT. EF just needs a non-null key to track the entity.
-            StudentId = Guid.NewGuid().ToString("N").Substring(0, 11).ToUpper(),
-            StudentNo = model.StudentNo,
-            Program = model.Program,
-            FullName = fullName,
-            Email = model.Email,
-            Password = BCrypt.Net.BCrypt.HashPassword(model.Password)
-        };
-
-        _context.Students.Add(student);
-        await _context.SaveChangesAsync();
+        // Raw SQL lets the MySQL trigger generate StudentId
+        await _context.Database.ExecuteSqlRawAsync(
+            @"INSERT INTO students (student_no, program, full_name, email, password)
+              VALUES ({0}, {1}, {2}, {3}, {4})",
+            model.StudentNo,
+            model.Program,
+            fullName,
+            model.Email,
+            BCrypt.Net.BCrypt.HashPassword(model.Password)
+        );
 
         TempData["SuccessMessage"] = "Account created successfully. Please sign in.";
         return RedirectToAction("Index", "Login");
@@ -92,7 +89,7 @@ public class RegisterController : Controller
             list.Add(new SelectListItem
             {
                 Value = p.Code,
-                Text = p.Code,
+                Text  = p.Code,
                 Group = group
             });
         }

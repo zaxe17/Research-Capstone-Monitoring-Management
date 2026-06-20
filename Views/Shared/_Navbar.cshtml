@@ -21,6 +21,8 @@
     var initials = nameParts.Length >= 2
         ? $"{nameParts[0][0]}{nameParts[^1][0]}".ToUpper()
         : (nameParts.Length == 1 ? fullName.Substring(0, Math.Min(2, fullName.Length)).ToUpper() : "??");
+
+    var isLoggedIn = !string.IsNullOrEmpty(role);
 }
 
 <nav class="navbar navbar-expand-lg navbar-dark"
@@ -69,6 +71,23 @@
                     </small>
                 }
             </div>
+
+            @if (isLoggedIn)
+            {
+                <form asp-controller="Login" asp-action="Logout" method="post" style="margin-left: 6px;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm"
+                            style="background:transparent; border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:12px; padding:4px 10px; display:flex; align-items:center; gap:6px;"
+                            title="Sign out">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Sign out
+                    </button>
+                </form>
+            }
         </div>
 
 

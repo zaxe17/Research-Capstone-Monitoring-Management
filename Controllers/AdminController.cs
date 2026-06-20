@@ -9,6 +9,8 @@ public class AdminController : Controller
     public IActionResult Index()
     {
         var sidebar = SidebarData.AdminMenu();
-        return View(sidebar);
+        ViewBag.Sidebar = sidebar;
+        
+        return View();
     }
 }

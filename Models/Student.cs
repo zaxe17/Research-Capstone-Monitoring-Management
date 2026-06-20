@@ -7,7 +7,7 @@ public class Student
 {
     [Key]
     [Column("student_id")]
-    [MaxLength(11)]
+    [MaxLength(13)]  // SN-00000001 = 13 chars
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public string StudentId { get; set; }
 
