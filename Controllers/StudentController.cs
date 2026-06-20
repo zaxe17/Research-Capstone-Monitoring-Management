@@ -59,7 +59,13 @@ public class StudentController : Controller
         ViewBag.CurrentPaperTitle = info?.Title;
     }
 
-    public async Task<IActionResult> Index(int page = 1)
+    // ================================
+    // FIXED: Index now actually reads search / category / year from the
+    // query string and applies them to the query. Previously these values
+    // were sent by the view's filter form but never bound to any parameter,
+    // so the filters had no effect on the results.
+    // ================================
+    public async Task<IActionResult> Index(string? search, string? category, int? year, int page = 1)
     {
         ViewBag.Sidebar = GetSidebar();
 
@@ -69,11 +75,34 @@ public class StudentController : Controller
             await SetCurrentPaperInfoAsync(studentId);
         }
 
-        var query = _context.ResearchPapers
+        IQueryable<ResearchPaper> query = _context.ResearchPapers
             .Include(p => p.Category)
             .Include(p => p.Student)
-            .Where(p => p.Status == PaperStatus.Approved)
-            .OrderByDescending(p => p.DateUploaded);
+            .Where(p => p.Status == PaperStatus.Approved);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            query = query.Where(p =>
+                p.Title.Contains(term) ||
+                (p.Keywords != null && p.Keywords.Contains(term)) ||
+                (p.Student != null && p.Student.FullName.Contains(term)));
+        }
+
+        // The category dropdown submits the CategoryName text (e.g. "IoT / Embedded Systems"),
+        // not the numeric CategoryId, so match on the related Category's name.
+        if (!string.IsNullOrWhiteSpace(category) && category != "All categories")
+        {
+            var categoryTerm = category.Trim();
+            query = query.Where(p => p.Category != null && p.Category.CategoryName == categoryTerm);
+        }
+
+        if (year.HasValue)
+        {
+            query = query.Where(p => p.Year == year.Value);
+        }
+
+        query = query.OrderByDescending(p => p.DateUploaded);
 
         int totalCount = await query.CountAsync();
         int totalPages = (int)Math.Ceiling(totalCount / (double)PageSize);
@@ -90,6 +119,13 @@ public class StudentController : Controller
         ViewBag.CurrentPage = page;
         ViewBag.TotalPages = totalPages;
         ViewBag.TotalCount = totalCount;
+
+        // Keep filter state so the search box / dropdowns can stay populated
+        // after the page reloads with the applied filters.
+        ViewBag.SearchTerm = search;
+        ViewBag.SelectedCategory = category;
+        ViewBag.SelectedYear = year;
+        ViewBag.Categories = await _context.Categories.OrderBy(c => c.CategoryName).ToListAsync();
 
         return View();
     }

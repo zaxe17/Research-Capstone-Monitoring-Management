@@ -16,7 +16,9 @@
                  }' />
 
         <!-- Search bar -->
-        <partial name="_Searchbar" />
+        <form method="get" asp-action="Index" asp-controller="Student">
+            <partial name="_Searchbar" />
+        </form>
 
         <!-- Table -->
         <div class="card" style="padding: 0;">
@@ -70,6 +72,7 @@
 
                             <td>
                                 <a asp-action="Details" asp-controller="Repository" asp-route-id="@paper.PaperId"
+                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
                                    class="btn ghost sm" style="font-size: 12px;">
                                     View
                                 </a>
@@ -82,24 +85,33 @@
 
         @if (totalPages > 1)
         {
-            <nav class="mt-3">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
-                        <a class="page-link" asp-action="Index" asp-controller="Student" asp-route-page="@(currentPage - 1)">Previous</a>
-                    </li>
+            <div class="d-flex justify-content-end mt-3">
+                <nav class="d-flex gap-2">
+                    @if (currentPage > 1)
+                    {
+                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
+                           asp-action="Index" asp-controller="Student"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
+                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage - 1)">Previous</a>
+                    }
 
                     @for (int i = 1; i <= totalPages; i++)
                     {
-                        <li class="page-item @(i == currentPage ? "active" : "")">
-                            <a class="page-link" asp-action="Index" asp-controller="Student" asp-route-page="@i">@i</a>
-                        </li>
+                        <a class="form-button @(i == currentPage ? "" : "ghost")" style="padding:6px 14px; font-size:12px;"
+                           asp-action="Index" asp-controller="Student"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
+                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@i">@i</a>
                     }
 
-                    <li class="page-item @(currentPage >= totalPages ? "disabled" : "")">
-                        <a class="page-link" asp-action="Index" asp-controller="Student" asp-route-page="@(currentPage + 1)">Next</a>
-                    </li>
-                </ul>
-            </nav>
+                    @if (currentPage < totalPages)
+                    {
+                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
+                           asp-action="Index" asp-controller="Student"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
+                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage + 1)">Next</a>
+                    }
+                </nav>
+            </div>
         }
     </main>
 </div>

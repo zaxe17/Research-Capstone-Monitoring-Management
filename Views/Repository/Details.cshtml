@@ -6,11 +6,22 @@
     var keywordList = string.IsNullOrWhiteSpace(Model.Keywords)
         ? new List<string>()
         : Model.Keywords.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
+    var backUrl = !string.IsNullOrWhiteSpace(ViewBag.ReturnUrl as string)
+        ? (string)ViewBag.ReturnUrl
+        : Url.Action("Index", "Repository");
 }
 
 <div class="d-flex w-100 h-100">
     <partial name="_Sidebar" model="ViewBag.Sidebar" />
     <main class="flex-grow-1" style="padding: 30px;">
+
+        <div class="mb-3">
+            <a class="btn ghost sm" style="display:inline-flex; align-items:center; gap:6px; width:fit-content;"
+               href="@backUrl">
+                <span aria-hidden="true">&larr;</span> Back to repository
+            </a>
+        </div>
+
         <div class="row g-3">
             <div class="col-lg-7">
                 <div class="card">

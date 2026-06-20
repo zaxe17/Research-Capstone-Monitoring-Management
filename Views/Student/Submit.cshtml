@@ -111,16 +111,17 @@
     const btnAddTyped = document.getElementById('btnAddTyped');
     let debounceTimer = null;
 
-    function renderMemberCard(name, role, hasAccount) {
+    function renderMemberCard(name, role, hasAccount, studentId) {
         const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
         const accountLabel = hasAccount
             ? '<span class="text-success fw-semibold" style="font-size: 12px;">Account</span>'
             : '<span class="fw-semibold" style="font-size: 12px; color:#b8860b;">No account</span>';
 
         const div = document.createElement('div');
-        div.className = 'd-flex align-items-center justify-content-between py-2';
+        div.className = 'member-card d-flex align-items-center justify-content-between py-2';
         div.style.fontSize = '13px';
         div.style.borderBottom = '1px solid var(--line)';
+        div.dataset.studentId = studentId || '';
         div.innerHTML = `
             <div class="d-flex align-items-center" style="gap: 10px;">
                 <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center"
@@ -130,9 +131,21 @@
                     <small style="font-size: 10px; opacity: 0.75;">${role}</small>
                 </div>
             </div>
-            ${accountLabel}
+            <div class="d-flex align-items-center" style="gap:10px;">
+                ${accountLabel}
+                <button type="button" class="btn-remove-member" title="Remove"
+                        style="border:none; background:none; color:var(--ink-600); font-size:16px; line-height:1; cursor:pointer;">&times;</button>
+            </div>
         `;
         return div;
+    }
+
+    function reindexMembers() {
+        const idInputs = hiddenInputs.querySelectorAll('input[name$=".StudentId"]');
+        const nameInputs = hiddenInputs.querySelectorAll('input[name$=".MemberName"]');
+        idInputs.forEach((input, i) => input.name = `Members[${i}].StudentId`);
+        nameInputs.forEach((input, i) => input.name = `Members[${i}].MemberName`);
+        memberIndex = idInputs.length;
     }
 
     function addMember(studentId, fullName) {
@@ -140,7 +153,9 @@
         if (studentId && addedStudentIds.has(studentId)) return;
         if (studentId) addedStudentIds.add(studentId);
 
-        cardList.appendChild(renderMemberCard(fullName.trim(), 'Member', !!studentId));
+        const trimmedName = fullName.trim();
+        const card = renderMemberCard(trimmedName, 'Member', !!studentId, studentId);
+        cardList.appendChild(card);
 
         const idx = memberIndex++;
         const idInput = document.createElement('input');
@@ -151,15 +166,35 @@
         const nameInput = document.createElement('input');
         nameInput.type = 'hidden';
         nameInput.name = `Members[${idx}].MemberName`;
-        nameInput.value = fullName.trim();
+        nameInput.value = trimmedName;
 
         hiddenInputs.appendChild(idInput);
         hiddenInputs.appendChild(nameInput);
+
+        card._inputs = [idInput, nameInput];
 
         searchInput.value = '';
         suggestionsBox.style.display = 'none';
         suggestionsBox.innerHTML = '';
     }
+
+    // Remove member when the × button is clicked
+    cardList.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-remove-member');
+        if (!btn) return;
+
+        const card = btn.closest('.member-card');
+        if (!card) return;
+
+        const sid = card.dataset.studentId;
+        if (sid) addedStudentIds.delete(sid);
+
+        if (card._inputs) {
+            card._inputs.forEach(input => input.remove());
+        }
+        card.remove();
+        reindexMembers();
+    });
 
     searchInput.addEventListener('input', function () {
         const term = this.value.trim();
