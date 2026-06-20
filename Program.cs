@@ -15,7 +15,7 @@ builder.Services.AddSession();
 
 var app = builder.Build();
 
-// Seed academic programs
+// Seed database (admin account, categories, academic programs)
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

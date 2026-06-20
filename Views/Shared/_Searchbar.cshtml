@@ -1,30 +1,35 @@
+@{
+    var selectedCategory = ViewBag.SelectedCategory as string;
+    var selectedYear = ViewBag.SelectedYear as int?;
+}
+
 <div class="row g-2 mb-4">
     <div class="col-md-6">
         <div class="position-relative">
             <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
             <input type="text" class="form-control ps-5" style="font-size: 14px;" placeholder="Search by title, keyword, or author"
-                   id="repoSearch" oninput="filterRepo()">
+                   id="repoSearch" name="search" value="@ViewBag.SearchTerm"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault(); this.form.submit();}">
         </div>
     </div>
 
     <div class="col-md-3">
-        <select class="form-select" style="font-size: 14px;" id="repoCategory" onchange="filterRepo()">
+        <select class="form-select" style="font-size: 14px;" id="repoCategory" name="category" onchange="this.form.submit()">
             <option value="">All categories</option>
-            <option>Mobile Application</option>
-            <option>Web Application</option>
-            <option>IoT / Embedded Systems</option>
-            <option>Data Analytics</option>
-            <option>Machine Learning</option>
+            <option value="Mobile Application" selected="@(selectedCategory == "Mobile Application")">Mobile Application</option>
+            <option value="Web Application" selected="@(selectedCategory == "Web Application")">Web Application</option>
+            <option value="IoT / Embedded Systems" selected="@(selectedCategory == "IoT / Embedded Systems")">IoT / Embedded Systems</option>
+            <option value="Data Analytics" selected="@(selectedCategory == "Data Analytics")">Data Analytics</option>
+            <option value="Machine Learning" selected="@(selectedCategory == "Machine Learning")">Machine Learning</option>
         </select>
     </div>
 
     <div class="col-md-3">
-        <select class="form-select" style="font-size: 14px;" id="repoYear" onchange="filterRepo()">
+        <select class="form-select" style="font-size: 14px;" id="repoYear" name="year" onchange="this.form.submit()">
             <option value="">All years</option>
-            <option>2026</option>
-            <option>2025</option>
-            <option>2024</option>
+            <option value="2026" selected="@(selectedYear == 2026)">2026</option>
+            <option value="2025" selected="@(selectedYear == 2025)">2025</option>
+            <option value="2024" selected="@(selectedYear == 2024)">2024</option>
         </select>
     </div>
-
 </div>

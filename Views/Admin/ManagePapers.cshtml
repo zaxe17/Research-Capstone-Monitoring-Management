@@ -1,7 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Student Page";
-    int currentPage = (int)ViewBag.CurrentPage;
-    int totalPages = (int)ViewBag.TotalPages;
+@{
+    ViewData["Title"] = "Manage Papers Page";
 }
 
 <div class="d-flex w-100 h-100">
@@ -10,13 +8,13 @@
         <!-- Header -->
         <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
                  {
-                     ["TabName"] = "Repository",
-                     ["Content"] = "Browse approved research",
-                     ["Description"] = "Check if a capstone topic already exists before drafting your proposal."
+                     ["TabName"] = "Admin module",
+                     ["Content"] = "Manage papers",
+                     ["Description"] = "Review, approve, reject, edit, or remove research submissions."
                  }' />
 
-        <!-- Search bar -->
-        <form method="get" asp-action="Index" asp-controller="Student">
+<!-- Search bar -->
+<form method="get" asp-action="Index" asp-controller="Student">
             <partial name="_Searchbar" />
         </form>
 
@@ -35,55 +33,48 @@
                 </thead>
 
                 <tbody>
-                    @if (ViewBag.Papers.Count == 0)
-                    {
-                        <tr>
-                            <td colspan="6" class="text-center small-text py-4">No approved papers found.</td>
-                        </tr>
-                    }
-                    @foreach (var paper in ViewBag.Papers)
-                    {
-                        <tr>
-                            <td>
-                                <div class="title-cell">
-                                    @paper.Title
-                                </div>
-                            </td>
+                    @* <tr>
+                        <td colspan="6" class="text-center small-text py-4">No approved papers found.</td>
+                    </tr> *@
 
-                            <td>
-                                <span class="cat-pill">
-                                    @(paper.Category?.CategoryName ?? "Uncategorized")
-                                </span>
-                            </td>
+                    
+                    <tr>
+                        <td>
+                            <span class="title-cell">
+                                BeeGuard: A Crowdsourced Mobile Platform for Native Bee Conservation...
+                            </span>
+                        </td>
 
-                            <td>
-                                @paper.Year
-                            </td>
+                        <td>
+                            <span class="cat-pill">
+                                Mobile Application
+                            </span>
+                        </td>
 
-                            <td>
-                                @paper.Student?.FullName
-                            </td>
+                        <td>
+                            2026
+                        </td>
 
-                            <td>
-                                <span class="badge approved py-2">
-                                    <i class="ti ti-check"></i> @paper.Status
-                                </span>
-                            </td>
+                        <td>
+                            K. Gamayo
+                        </td>
 
-                            <td>
-                                <a asp-action="Details" asp-controller="Repository" asp-route-id="@paper.PaperId"
-                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
-                                   class="btn ghost sm" style="font-size: 12px;">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                        <td>
+                            <span class="badge approved py-2">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td>
+                            Delete
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
 
-        @if (totalPages > 1)
+        @* @if (totalPages > 1)
         {
             <div class="d-flex justify-content-end mt-3">
                 <nav class="d-flex gap-2">
@@ -112,6 +103,6 @@
                     }
                 </nav>
             </div>
-        }
+        } *@
     </main>
 </div>
