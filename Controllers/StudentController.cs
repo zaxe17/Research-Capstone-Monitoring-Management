@@ -130,6 +130,12 @@ public class StudentController : Controller
         return View();
     }
 
+    // FIX: Total Papers card now reflects submitted work only (Pending + Approved
+    // + Rejected), excluding Draft. Previously the view used ViewBag.Papers.Count
+    // (all rows, including Draft), which didn't match the Pending/Approved/Rejected
+    // breakdown below it — e.g. 18 total vs 10+6+1=17, with the missing 1 being a
+    // Draft paper that has no bucket in the breakdown. RejectedCount was also
+    // missing entirely before this fix.
     public async Task<IActionResult> MyWorks()
     {
         ViewBag.Sidebar = GetSidebar();
@@ -160,7 +166,11 @@ public class StudentController : Controller
         ViewBag.AsMember = papers.Count(p => p.Role == "Member");
         ViewBag.PendingCount = papers.Count(p => p.Status == "PENDING");
         ViewBag.ApprovedCount = papers.Count(p => p.Status == "APPROVED");
+        ViewBag.RejectedCount = papers.Count(p => p.Status == "REJECTED");
         ViewBag.DraftCount = papers.Count(p => p.Status == "DRAFT");
+
+        // "Total Papers" = submitted work only (excludes Draft).
+        ViewBag.TotalCount = papers.Count(p => p.Status != "DRAFT");
 
         ViewBag.Papers = papers;
 

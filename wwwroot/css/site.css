@@ -290,3 +290,7 @@ select.badge {
 .cursor-pointer {
     cursor: pointer;
 }
+.badge.draft {
+    background-color: var(--ink-100);
+    color: var(--ink-600);
+}
