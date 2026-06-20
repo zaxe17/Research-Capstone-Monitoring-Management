@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj": {}
+    "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj": {}
   },
   "projects": {
-    "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj": {
+    "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj",
+        "projectUniqueName": "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj",
         "projectName": "monitoring_management",
-        "projectPath": "C:\\ADET\\Research-Capstone-Monitoring-Management\\monitoring_management.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\ADET\\Research-Capstone-Monitoring-Management\\obj\\",
+        "projectPath": "D:\\Projects\\.net\\monitoring_management\\monitoring_management.csproj",
+        "packagesPath": "C:\\Users\\A\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\.net\\monitoring_management\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\A\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"

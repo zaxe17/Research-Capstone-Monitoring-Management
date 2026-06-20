@@ -14,23 +14,20 @@
                          ["Description"] = "Papers where you are listed as a leader or member."
                      }' />
 
-            <a class="form-button gold" style="white-space: nowrap;" asp-controller="Student" asp-action="Submit">
+<a class="form-button gold" style="white-space: nowrap;" asp-controller="Student" asp-action="Submit">
                 New submission
             </a>
         </div>
 
         <!-- Status -->
         <div class="mb-4 d-flex justify-content-center gap-2 w-100">
-            <partial name="_Statcard"
-                     model="@(new StatCardModel { Number = ViewBag.AsLeader, Label = "As leader" })" />
-            <partial name="_Statcard"
-                     model="@(new StatCardModel { Number = ViewBag.AsMember, Label = "As member" })" />
+            <partial name="_Statcard" model="@(new StatCardModel { Number = ViewBag.AsLeader, Label = "As leader" })" />
+            <partial name="_Statcard" model="@(new StatCardModel { Number = ViewBag.AsMember, Label = "As member" })" />
             <partial name="_Statcard"
                      model="@(new StatCardModel { Number = ViewBag.PendingCount, Label = "Pending review" })" />
             <partial name="_Statcard"
                      model="@(new StatCardModel { Number = ViewBag.ApprovedCount, Label = "Approved" })" />
-            <partial name="_Statcard"
-                     model="@(new StatCardModel { Number = ViewBag.DraftCount, Label = "Draft" })" />
+            <partial name="_Statcard" model="@(new StatCardModel { Number = ViewBag.DraftCount, Label = "Draft" })" />
         </div>
 
         <!-- Table -->
@@ -49,6 +46,13 @@
                 <tbody>
                     @foreach (var paper in ViewBag.Papers)
                     {
+                        var statusClass = paper.Status switch
+                        {
+                            "APPROVED" => "approved",
+                            "REJECTED" => "rejected",
+                            _ => "pending"
+                        };
+
                         <tr>
                             <td>
                                 <div class="title-cell">
@@ -67,17 +71,14 @@
                             </td>
 
                             <td>
-                                <span class="badge approved py-2">
+                                <span class="badge @statusClass py-2">
                                     @paper.Status
                                 </span>
                             </td>
 
                             <td>
-                                @* FIX: dati'y onclick="showView('paperDetails')" — JS function na
-                                   walang depinisyon sa actual app, kaya hindi gumagana ang button.
-                                   Ngayon, totoong link na patungo sa PaperDetails action. *@
-                                <a class="btn ghost sm" style="font-size: 12px;"
-                                   asp-controller="Student" asp-action="PaperDetails" asp-route-id="@paper.PaperId">
+                                <a class="btn ghost sm" style="font-size: 12px;" asp-controller="Student"
+                                   asp-action="PaperDetails" asp-route-id="@paper.PaperId">
                                     View
                                 </a>
                             </td>

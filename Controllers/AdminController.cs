@@ -81,4 +81,12 @@ public class AdminController : Controller
 
         return Ok();
     }
+
+    public async Task<IActionResult> ManagePapers()
+    {
+        var sidebar = SidebarData.AdminMenu();
+        ViewBag.Sidebar = sidebar;
+
+        return View();
+    }
 }
