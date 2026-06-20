@@ -15,8 +15,8 @@
                      ["Description"] = "Check if a capstone topic already exists before drafting your proposal."
                  }' />
 
-        <!-- Search bar -->
-        <form method="get" asp-action="Index" asp-controller="Student">
+<!-- Search bar -->
+<form method="get" asp-action="Index" asp-controller="Student">
             <partial name="_Searchbar" />
         </form>
 
@@ -42,42 +42,79 @@
                         </tr>
                     }
                     @foreach (var paper in ViewBag.Papers)
+
                     {
+
+                        var statusClass = paper.Status switch
+
+                        {
+
+                            PaperStatus.Approved => "approved",
+
+                            PaperStatus.Rejected => "rejected",
+
+                            _ => "pending"
+
+                        };
+
                         <tr>
+
                             <td>
+
                                 <div class="title-cell">
+
                                     @paper.Title
+
                                 </div>
+
                             </td>
 
                             <td>
+
                                 <span class="cat-pill">
+
                                     @(paper.Category?.CategoryName ?? "Uncategorized")
+
                                 </span>
+
                             </td>
 
                             <td>
+
                                 @paper.Year
+
                             </td>
 
                             <td>
+
                                 @paper.Student?.FullName
+
                             </td>
 
                             <td>
-                                <span class="badge approved py-2">
+
+                                <span class="badge @statusClass py-2">
+
                                     <i class="ti ti-check"></i> @paper.Status
+
                                 </span>
+
                             </td>
 
                             <td>
+
                                 <a asp-action="Details" asp-controller="Repository" asp-route-id="@paper.PaperId"
                                    asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
                                    class="btn ghost sm" style="font-size: 12px;">
+
                                     View
+
                                 </a>
+
                             </td>
+
                         </tr>
+
                     }
                 </tbody>
             </table>
@@ -89,26 +126,26 @@
                 <nav class="d-flex gap-2">
                     @if (currentPage > 1)
                     {
-                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
-                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage - 1)">Previous</a>
+                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;" asp-action="Index"
+                           asp-controller="Student" asp-route-search="@ViewBag.SearchTerm"
+                           asp-route-category="@ViewBag.SelectedCategory" asp-route-year="@ViewBag.SelectedYear"
+                           asp-route-page="@(currentPage - 1)">Previous</a>
                     }
 
                     @for (int i = 1; i <= totalPages; i++)
                     {
                         <a class="form-button @(i == currentPage ? "" : "ghost")" style="padding:6px 14px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
-                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@i">@i</a>
+                           asp-action="Index" asp-controller="Student" asp-route-search="@ViewBag.SearchTerm"
+                           asp-route-category="@ViewBag.SelectedCategory" asp-route-year="@ViewBag.SelectedYear"
+                           asp-route-page="@i">@i</a>
                     }
 
                     @if (currentPage < totalPages)
                     {
-                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
-                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage + 1)">Next</a>
+                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;" asp-action="Index"
+                           asp-controller="Student" asp-route-search="@ViewBag.SearchTerm"
+                           asp-route-category="@ViewBag.SelectedCategory" asp-route-year="@ViewBag.SelectedYear"
+                           asp-route-page="@(currentPage + 1)">Next</a>
                     }
                 </nav>
             </div>

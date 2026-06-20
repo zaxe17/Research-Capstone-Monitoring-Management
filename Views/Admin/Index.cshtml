@@ -83,7 +83,7 @@
                             </td>
 
                             <td>
-                                <select class="badge @statusClass py-2 status-select" data-paper-id="@paper.PaperId">
+                                <select class="badge @statusClass py-2 status-select border-0 cursor-pointer" data-paper-id="@paper.PaperId">
                                     <option value="Approved" selected="@(paper.Status == PaperStatus.Approved)">Approved</option>
                                     <option value="Rejected" selected="@(paper.Status == PaperStatus.Rejected)">Rejected</option>
                                     <option value="Pending" selected="@(paper.Status == PaperStatus.Pending)">Pending</option>
