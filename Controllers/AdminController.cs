@@ -182,4 +182,12 @@ public class AdminController : Controller
 
         return Ok();
     }
+
+    public async Task<IActionResult> ManageStudent()
+    {
+        var sidebar = SidebarData.StudentMenu();
+        ViewBag.Sidebar = sidebar;
+
+        return View();
+    }
 }
