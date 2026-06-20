@@ -1,0 +1,38 @@
+@{
+    var selectedCategory = ViewBag.SelectedCategory as string;
+    var selectedStatus = ViewBag.SelectedStatus as string;
+}
+
+<div class="row g-2 mb-4">
+    <div class="col-md-6">
+        <div class="position-relative">
+            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+            <input type="text" class="form-control ps-5" style="font-size: 14px;" placeholder="Search by title, keyword, or author"
+                   id="manageSearch" name="search" value="@ViewBag.SearchTerm"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault(); this.form.submit();}">
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <select class="form-select" style="font-size: 14px;" id="manageCategory" name="category" onchange="this.form.submit()">
+            <option value="">All categories</option>
+            <option value="Mobile Application" selected="@(selectedCategory == "Mobile Application")">Mobile Application</option>
+            <option value="Web Application" selected="@(selectedCategory == "Web Application")">Web Application</option>
+            <option value="IoT / Embedded Systems" selected="@(selectedCategory == "IoT / Embedded Systems")">IoT / Embedded Systems</option>
+            <option value="Data Analytics" selected="@(selectedCategory == "Data Analytics")">Data Analytics</option>
+            <option value="Machine Learning" selected="@(selectedCategory == "Machine Learning")">Machine Learning</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        @* FIX: dati "year" dropdown ito; ngayon "status" filter na, dahil sa
+               admin review workflow, mas relevant ang Pending/Approved/Rejected
+               kaysa sa taon. *@
+        <select class="form-select" style="font-size: 14px;" id="manageStatus" name="status" onchange="this.form.submit()">
+            <option value="">All statuses</option>
+            <option value="Pending" selected="@(selectedStatus == "Pending")">Pending</option>
+            <option value="Approved" selected="@(selectedStatus == "Approved")">Approved</option>
+            <option value="Rejected" selected="@(selectedStatus == "Rejected")">Rejected</option>
+        </select>
+    </div>
+</div>

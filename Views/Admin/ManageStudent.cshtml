@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Manage students Page";
+}
+
+<div class="d-flex w-100 h-100">
+    <partial name="_Sidebar" model="ViewBag.Sidebar" />
+    <main class="flex-grow-1" style="padding: 30px;">
+        <!-- Header -->
+        <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                 {
+                     ["TabName"] = "Admin module",
+                     ["Content"] = "Manage students",
+                     ["Description"] = "View student accounts and resolve unlinked research members."
+                 }' />
+
+<!-- Search bar -->
+<div class="position-relative mb-4">
+            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+            <input type="text" class="form-control ps-5" style="font-size: 14px;"
+                   placeholder="Search by name, student no., or email">
+        </div>
+
+        <!-- Table -->
+        <div class="card" style="padding: 0;">
+            <table style="font-size: 13px;">
+                <thead>
+                    <tr>
+                        <th style="font-size: 10px; color: var(--ink-600);">STUDENT NO.</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">FULL NAME</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">EMAIL</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">LINKED PAPERS</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">ACTIONS</th>
+                        <th style="font-size: 10px; color: var(--ink-600);"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @* <tr>
+                        <td colspan="6" class="text-center small-text py-4">No approved papers found.</td>
+                    </tr> *@
+
+                    
+                    <tr>
+                        <td>
+                            <span class="title-cell">
+                                2021-00451-MN-0
+                            </span>
+                        </td>
+
+                        <td>
+                            Kel S. Gamayo
+                        </td>
+
+                        <td>
+                            kel.gamayo@iskolarngbayan.pup.edu.ph
+                        </td>
+
+                        <td>
+                            2
+                        </td>
+
+                        <td>
+                            Delete
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        @* @if (totalPages > 1)
+        {
+            <div class="d-flex justify-content-end mt-3">
+                <nav class="d-flex gap-2">
+                    @if (currentPage > 1)
+                    {
+                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
+                           asp-action="Index" asp-controller="Student"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
+                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage - 1)">Previous</a>
+                    }
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <a class="form-button @(i == currentPage ? "" : "ghost")" style="padding:6px 14px; font-size:12px;"
+                           asp-action="Index" asp-controller="Student"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
+                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@i">@i</a>
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
+                           asp-action="Index" asp-controller="Student"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
+                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage + 1)">Next</a>
+                    }
+                </nav>
+            </div>
+        } *@
+    </main>
+</div>
