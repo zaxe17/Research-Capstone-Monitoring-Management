@@ -1,0 +1,281 @@
+@using monitoring_management.Models
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model monitoring_management.Models.SubmitResearchViewModel
+@{
+    ViewData["Title"] = "Edit Research";
+    var leader = ViewBag.LeaderMember as ResearchMember;
+    var existingMembers = ViewBag.ExistingMembers as List<ResearchMember> ?? new List<ResearchMember>();
+    var paperId = ViewBag.PaperId as string;
+}
+
+<div class="d-flex w-100 h-100">
+    <partial name="_Sidebar" model="ViewBag.Sidebar" />
+
+    <main class="flex-grow-1" style="padding: 30px;">
+        @* Header *@
+        <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                 {
+                     ["TabName"] = "Edit research",
+                     ["Content"] = "Update capstone submission",
+                     ["Description"] = "Update your paper details and group members, then save your changes."
+                 }' />
+
+        <form class="row g-3" id="editForm" asp-controller="Student" asp-action="EditSubmit" asp-route-id="@paperId" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="col-lg-7">
+                <div class="card">
+                    <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
+
+                    <div class="input-group-sm mb-3">
+                        <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Title</label>
+                        <input class="form-control form-control-lg" style="font-size: 12px;" asp-for="Title">
+                    </div>
+
+                    <div class="input-group-sm mb-3">
+                        <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Description / abstract</label>
+                        <textarea class="form-control form-control-lg" style="font-size: 12px;" asp-for="Description"></textarea>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-lg-6 input-group-sm mb-3">
+                            <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Category</label>
+                            <select class="form-select form-select-lg auth-input" asp-for="CategoryId"
+                                    asp-items="@(new SelectList(ViewBag.Categories, "CategoryId", "CategoryName"))">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 input-group-sm mb-3">
+                            <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Academic year</label>
+                            <select class="form-select form-select-lg auth-input" asp-for="Year">
+                                <option value="">Select Academic year</option>
+                                @foreach (var y in (List<int>)ViewBag.Years)
+                                {
+                                    <option value="@y">@y</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group-sm mb-3">
+                        <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Keywords (comma-separated)</label>
+                        <input class="form-control form-control-lg" style="font-size: 12px;" asp-for="Keywords">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="d-flex flex-column gap-3">
+                    <div class="card">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Group members</h3>
+                        <p class="small-text mb-2">
+                            You're listed as <strong>Leader</strong>. Search for registered students to add as members,
+                            type a name to add one without an account, or remove an existing member.
+                        </p>
+
+                        <div class="input-group-sm mb-3" style="position: relative;">
+                            <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Add member</label>
+                            <div class="d-flex gap-2">
+                                <input class="form-control form-control-lg" style="font-size: 12px;"
+                                       id="memberSearchInput" placeholder="Search registered students or type a name" autocomplete="off">
+                                <button type="button" id="btnAddTyped" class="btn ghost sm" style="white-space:nowrap;">Add</button>
+                            </div>
+                            <div id="memberSuggestions" class="list-group" style="position:absolute; z-index: 10; width:100%; top: 60px; display:none; font-size:12px;"></div>
+                        </div>
+
+                        @if (leader != null)
+                        {
+                            <partial name="_Member_card" model="leader" />
+                        }
+
+                        <div id="memberList">
+                            @for (int i = 0; i < existingMembers.Count; i++)
+                            {
+                                var m = existingMembers[i];
+                                var displayName = m.Student != null && !string.IsNullOrWhiteSpace(m.Student.FullName)
+                                    ? m.Student.FullName
+                                    : (!string.IsNullOrWhiteSpace(m.MemberName) ? m.MemberName : "Unknown member");
+                                var initials = string.Join("", displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                    .Take(2).Select(w => w[0].ToString().ToUpper()));
+                                if (string.IsNullOrEmpty(initials)) { initials = "?"; }
+                                var hasAccount = m.StudentId != null;
+
+                                <div class="member-entry d-flex align-items-center justify-content-between py-2"
+                                     style="font-size: 13px; border-bottom: 1px solid var(--line);">
+                                    <div class="d-flex align-items-center" style="gap: 10px;">
+                                        <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center"
+                                             style="width:32px;height:32px;">@initials</div>
+                                        <div>
+                                            <div class="fw-semibold text-capitalize">@displayName.ToLower()</div>
+                                            <small style="font-size: 10px; opacity: 0.75;">Member</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center" style="gap:10px;">
+                                        @if (hasAccount)
+                                        {
+                                            <span class="text-success fw-semibold" style="font-size: 12px;">Account</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="fw-semibold" style="font-size: 12px; color:#b8860b;">No account</span>
+                                        }
+                                        <button type="button" class="btn-remove-member" title="Remove"
+                                                style="border:none; background:none; color:var(--ink-600); font-size:16px; line-height:1; cursor:pointer;">&times;</button>
+                                    </div>
+                                    <input type="hidden" name="Members[@i].StudentId" value="@(m.StudentId ?? "")" />
+                                    <input type="hidden" name="Members[@i].MemberName" value="@displayName" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card d-flex flex-column gap-2">
+                        <button class="form-button gold" type="submit" id="btnSaveChanges">Save changes</button>
+                        <a class="form-button ghost text-center" asp-controller="Student" asp-action="PaperDetails" asp-route-id="@paperId">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+(function () {
+    const addedStudentIds = new Set(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        existingMembers.Where(m => m.StudentId != null).Select(m => m.StudentId))));
+
+    const searchInput = document.getElementById('memberSearchInput');
+    const suggestionsBox = document.getElementById('memberSuggestions');
+    const memberList = document.getElementById('memberList');
+    const btnAddTyped = document.getElementById('btnAddTyped');
+    let debounceTimer = null;
+
+    function reindexMembers() {
+        const entries = memberList.querySelectorAll('.member-entry');
+        entries.forEach((entry, i) => {
+            const idInput = entry.querySelector('input[name$=".StudentId"]');
+            const nameInput = entry.querySelector('input[name$=".MemberName"]');
+            if (idInput) idInput.name = `Members[${i}].StudentId`;
+            if (nameInput) nameInput.name = `Members[${i}].MemberName`;
+        });
+    }
+
+    function createMemberEntry(studentId, fullName) {
+        const initials = fullName.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+        const accountLabel = studentId
+            ? '<span class="text-success fw-semibold" style="font-size: 12px;">Account</span>'
+            : '<span class="fw-semibold" style="font-size: 12px; color:#b8860b;">No account</span>';
+
+        const div = document.createElement('div');
+        div.className = 'member-entry d-flex align-items-center justify-content-between py-2';
+        div.style.fontSize = '13px';
+        div.style.borderBottom = '1px solid var(--line)';
+        div.innerHTML = `
+            <div class="d-flex align-items-center" style="gap: 10px;">
+                <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center"
+                     style="width:32px;height:32px;">${initials}</div>
+                <div>
+                    <div class="fw-semibold text-capitalize">${fullName.toLowerCase()}</div>
+                    <small style="font-size: 10px; opacity: 0.75;">Member</small>
+                </div>
+            </div>
+            <div class="d-flex align-items-center" style="gap:10px;">
+                ${accountLabel}
+                <button type="button" class="btn-remove-member" title="Remove"
+                        style="border:none; background:none; color:var(--ink-600); font-size:16px; line-height:1; cursor:pointer;">&times;</button>
+            </div>
+            <input type="hidden" name="Members[0].StudentId" value="${studentId || ''}" />
+            <input type="hidden" name="Members[0].MemberName" value="${fullName}" />
+        `;
+        return div;
+    }
+
+    function addMember(studentId, fullName) {
+        if (!fullName || !fullName.trim()) return;
+        if (studentId && addedStudentIds.has(studentId)) return;
+        if (studentId) addedStudentIds.add(studentId);
+
+        memberList.appendChild(createMemberEntry(studentId, fullName.trim()));
+        reindexMembers();
+
+        searchInput.value = '';
+        suggestionsBox.style.display = 'none';
+        suggestionsBox.innerHTML = '';
+    }
+
+    memberList.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-remove-member');
+        if (!btn) return;
+
+        const entry = btn.closest('.member-entry');
+        const idInput = entry.querySelector('input[name$=".StudentId"]');
+        if (idInput && idInput.value) addedStudentIds.delete(idInput.value);
+
+        entry.remove();
+        reindexMembers();
+    });
+
+    searchInput.addEventListener('input', function () {
+        const term = this.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (term.length < 2) {
+            suggestionsBox.style.display = 'none';
+            return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`/Student/SearchStudents?term=${encodeURIComponent(term)}`);
+                const students = await res.json();
+
+                suggestionsBox.innerHTML = '';
+
+                if (students.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    return;
+                }
+
+                students.forEach(s => {
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.className = 'list-group-item list-group-item-action';
+                    item.textContent = `${s.fullName} (${s.studentNo})`;
+                    item.addEventListener('click', () => addMember(s.studentId, s.fullName));
+                    suggestionsBox.appendChild(item);
+                });
+
+                suggestionsBox.style.display = 'block';
+            } catch (err) {
+                console.error('Student search failed', err);
+            }
+        }, 300);
+    });
+
+    // Press Enter to add the typed name directly
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const term = this.value.trim();
+            if (term.length > 0) {
+                addMember(null, term);
+            }
+        }
+    });
+
+    // Explicit Add button — covers the case where the user types a name
+    // and clicks "Add" instead of pressing Enter or picking a suggestion.
+    btnAddTyped.addEventListener('click', function () {
+        const term = searchInput.value.trim();
+        if (term.length > 0) {
+            addMember(null, term);
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsBox.contains(e.target) && e.target !== searchInput && !memberList.contains(e.target)) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+})();
+</script>

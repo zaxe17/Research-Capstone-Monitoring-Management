@@ -1,87 +1,117 @@
+@model List<ResearchPaper>
+
 @{
-    ViewData["Title"] = "Student Page";
+    ViewData["Title"] = "Repository";
+    int currentPage = (int)ViewBag.CurrentPage;
+    int totalPages = (int)ViewBag.TotalPages;
 }
 
 <div class="d-flex w-100 h-100">
     <partial name="_Sidebar" model="ViewBag.Sidebar" />
     <main class="flex-grow-1" style="padding: 30px;">
-        <div class="row g-3">
-            <div class="col-lg-7">
-                <div class="card">
-                    <div class="d-flex align-items-center gap-3" style="margin-bottom:14px;">
-                        <span class="cat-pill">
-                            Mobile Application
-                        </span>
-                        <span class="badge approved py-2">
-                            Approved
-                        </span>
-                    </div>
+        <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                 {
+                     ["TabName"] = "Repository",
+                     ["Content"] = "Browse approved research",
+                     ["Description"] = "Check if a capstone topic already exists before drafting your proposal."
+                 }' />
 
-                    <div class="pb-3 mb-3" style="border-bottom: 1px solid var(--line);">
-                        <p class="fw-bold mb-2" style="font-family:var(--font-display); font-size:24px; margin:12px 0 6px; color:var(--maroon-800);">
-                            BeeGuard: A Crowdsourced Mobile Platform for Native Bee Conservation and Honey Traceability in Region I and CAR
-                        </p>
-
-                        <div class="small-text">
-                            <span>Paper ID: RP-2026-0142</span> •
-                            <span>Uploaded April 18, 2026</span> •
-                            <span>Academic Year 2025–2026</span>
-                        </div>
-                    </div>
-
-                    <div class="pb-3 mb-3" style="border-bottom: 1px solid var(--line);">
-                        <h3 style="font-size:14px; font-weight:600; margin-bottom:8px;">Abstract</h3>
-                        <p class="fw-lighter m-0" style="font-size:14px; color:var(--ink-900);">
-                            This study presents BeeGuard, a mobile application designed to address the decline of native bee populations (Apis cerana and Tetragonula biroi) and the lack of digital infrastructure for apiarists in Region I and the Cordillera Administrative Region. The platform integrates crowdsourced colony reporting, image-based species identification, spatial hive mapping, and a direct-to-consumer marketplace with honey traceability features to combat adulteration.
-                        </p>
-                    </div>
-
-                    <div class="">
-                        <h3 style="font-size:14px; font-weight:600; margin-bottom:8px;">Keywords</h3>
-                        <div class="d-flex flex-wrap justify-content-start align-items-center">
-                            <div class="tag keywords">apiculture</div>
-                            <div class="tag keywords">native bee conservation</div>
-                            <div class="tag keywords">crowdsourcing</div>
-                            <div class="tag keywords">image processing</div>
-                            <div class="tag keywords">honey traceability</div>
-                            <div class="tag keywords">mobile application</div>
-                        </div>
-                    </div>
+        <div class="card">
+            <form method="get" asp-action="Index" asp-controller="Repository" class="row g-2 mb-3">
+                <div class="col-lg-6">
+                    <input type="text" name="search" value="@ViewBag.SearchTerm" class="form-control form-control-lg"
+                           style="font-size: 13px;" placeholder="Search by title, keyword, or author">
                 </div>
-            </div>
-
-            <div class="col-lg-5">
-                <div class="d-flex flex-column gap-3">
-                    <div class="card">
-                        <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Research members</h3>
-
-                        <div>
-                            @if (ViewBag.CurrentStudent != null)
-                            {
-                                <partial name="_Member_card" model="(Student)ViewBag.CurrentStudent" />
-                            }
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Submission info</h3>
-
-                        <table>
-                            <tr>
-                                <td style="padding:6px 0; color:var(--ink-600);">Adviser</td>
-                                <td style="padding:6px 0; text-align:right;">Dr. Lourdes Banzon</td>
-                            </tr>
-                            <tr>
-                                <td style="padding:6px 0; color:var(--ink-600);">Date approved</td>
-                                <td style="padding:6px 0; text-align:right;">April 22, 2026</td>
-                            </tr>
-                            <tr>
-                                <td style="padding:6px 0; color:var(--ink-600);">College</td>
-                                <td style="padding:6px 0; text-align:right;">CCIS</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="col-lg-3">
+                    <select name="categoryId" class="form-select form-select-lg" style="font-size: 13px;"
+                            onchange="this.form.submit()">
+                        <option value="">All categories</option>
+                        @foreach (var cat in (List<Category>)ViewBag.Categories)
+                        {
+                            <option value="@cat.CategoryId" selected="@(ViewBag.SelectedCategory != null && (int)ViewBag.SelectedCategory == cat.CategoryId)">
+                                @cat.CategoryName
+                            </option>
+                        }
+                    </select>
                 </div>
+                <div class="col-lg-3">
+                    <select name="year" class="form-select form-select-lg" style="font-size: 13px;"
+                            onchange="this.form.submit()">
+                        <option value="">All years</option>
+                        @foreach (var y in (List<int>)ViewBag.Years)
+                        {
+                            <option value="@y" selected="@(ViewBag.SelectedYear != null && (int)ViewBag.SelectedYear == y)">@y</option>
+                        }
+                    </select>
+                </div>
+            </form>
+
+            <table class="table" style="font-size: 13px;">
+                <thead>
+                    <tr style="color: var(--ink-600); font-size: 11px; text-transform: uppercase;">
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Year</th>
+                        <th>Uploaded by</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center small-text py-4">No approved papers found.</td>
+                        </tr>
+                    }
+                    @foreach (var paper in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@paper.Title</td>
+                            <td><span class="cat-pill">@(paper.Category?.CategoryName ?? "Uncategorized")</span></td>
+                            <td>@paper.Year</td>
+                            <td>@paper.Student?.FullName</td>
+                            <td><span class="badge approved py-2">Approved</span></td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-controller="Repository" asp-route-id="@paper.PaperId"
+                                   class="form-button ghost" style="padding: 6px 16px; font-size: 12px;">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="small-text">Showing @Model.Count of @ViewBag.TotalCount approved papers</div>
+
+                @if (totalPages > 1)
+                {
+                    <nav class="d-flex gap-2">
+                        @if (currentPage > 1)
+                        {
+                            <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
+                               asp-action="Index" asp-controller="Repository"
+                               asp-route-search="@ViewBag.SearchTerm" asp-route-categoryId="@ViewBag.SelectedCategory"
+                               asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage - 1)">Previous</a>
+                        }
+
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <a class="form-button @(i == currentPage ? "" : "ghost")" style="padding:6px 14px; font-size:12px;"
+                               asp-action="Index" asp-controller="Repository"
+                               asp-route-search="@ViewBag.SearchTerm" asp-route-categoryId="@ViewBag.SelectedCategory"
+                               asp-route-year="@ViewBag.SelectedYear" asp-route-page="@i">@i</a>
+                        }
+
+                        @if (currentPage < totalPages)
+                        {
+                            <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
+                               asp-action="Index" asp-controller="Repository"
+                               asp-route-search="@ViewBag.SearchTerm" asp-route-categoryId="@ViewBag.SelectedCategory"
+                               asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage + 1)">Next</a>
+                        }
+                    </nav>
+                }
             </div>
         </div>
     </main>

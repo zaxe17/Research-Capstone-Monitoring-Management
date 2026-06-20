@@ -1,9 +1,14 @@
+@using monitoring_management.Models
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model monitoring_management.Models.SubmitResearchViewModel
 @{
-    ViewData["Title"] = "Student Page";
+    ViewData["Title"] = "Submit Research";
+    var leader = ViewBag.LeaderMember as ResearchMember;
 }
 
 <div class="d-flex w-100 h-100">
     <partial name="_Sidebar" model="ViewBag.Sidebar" />
+
     <main class="flex-grow-1" style="padding: 30px;">
         @* Header *@
         <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
@@ -13,84 +18,210 @@
                      ["Description"] = "Fill in your paper details, add your group members, then submit for admin review."
                  }' />
 
-<form class="row g-3">
+        <form class="row g-3" id="submitForm" asp-controller="Student" asp-action="Submit" method="post">
+            @Html.AntiForgeryToken()
+
             <div class="col-lg-7">
                 <div class="card">
-                    <h3 class="" style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
+                    <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
 
                     <div class="input-group-sm mb-3">
-                        <label class="form-label"
-                               style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Title</label>
-                        <input class="form-control form-control-lg" style="font-size: 12px;">
+                        <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Title</label>
+                        <input class="form-control form-control-lg" style="font-size: 12px;" asp-for="Title">
                     </div>
 
                     <div class="input-group-sm mb-3">
-                        <label class="form-label"
-                               style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Description /
-                            abstract</label>
-                            <textarea class="form-control form-control-lg" style="font-size: 12px;"></textarea>
+                        <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Description / abstract</label>
+                        <textarea class="form-control form-control-lg" style="font-size: 12px;" asp-for="Description"></textarea>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-lg-6 input-group-sm mb-3">
+                            <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Category</label>
+                            <select class="form-select form-select-lg auth-input" asp-for="CategoryId"
+                                    asp-items="@(new SelectList(ViewBag.Categories, "CategoryId", "CategoryName"))">
+                                <option value="">Select Category</option>
+                            </select>
                         </div>
-
-                        <div class="row g-3">
-                            <div class="col-lg-6 input-group-sm mb-3">
-                                <label class="form-label"
-                                       style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Category</label>
-                                <select class="form-select form-select-lg auth-input">
-                                    <option value="">Select Category</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-6 input-group-sm mb-3">
-                                <label class="form-label"
-                                       style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Academic
-                                    year</label>
-                                    <select class="form-select form-select-lg auth-input">
-                                        <option value="">Select Academic year</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="input-group-sm mb-3">
-                                <label class="form-label"
-                                       style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Keywords
-                                    (comma-separated)</label>
-                                    <input class="form-control form-control-lg" style="font-size: 12px;">
-                                </div>
-
-                            </div>
+                        <div class="col-lg-6 input-group-sm mb-3">
+                            <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Academic year</label>
+                            <select class="form-select form-select-lg auth-input" asp-for="Year">
+                                <option value="">Select Academic year</option>
+                                @foreach (var y in (List<int>)ViewBag.Years)
+                                {
+                                    <option value="@y">@y</option>
+                                }
+                            </select>
                         </div>
+                    </div>
 
-                        <div class="col-lg-5">
-                            <div class="d-flex flex-column gap-3">
-                                <div class="card">
-                                    <h3 class="" style="font-size:14px; font-weight:600; margin-bottom:14px;">Paper information</h3>
-                                    <p class="small-text mb-2">You're added automatically as <strong>Leader</strong>. Search for
-                                        registered students to
-                                        add as members, or type a name for a member without an account — they can be linked later.
-                                    </p>
-
-                                    <div class="input-group-sm mb-3">
-                                        <label class="form-label"
-                                               style="font-size: 12px; color: var(--ink-900); border-color: var(--line);">Add
-                                            member</label>
-                                            <input class="form-control form-control-lg" style="font-size: 12px;"
-                                                   placeholder="Search registered students or type a name">
-                                        </div>
-
-                                        <div class="">
-                                            @if (ViewBag.CurrentStudent != null)
-                                            {
-                                                <partial name="_Member_card" model="(Student)ViewBag.CurrentStudent" />
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <div class="card d-flex flex-column gap-2">
-                                        <button class="form-button gold">Submit for review</button>
-
-                                        <button class="form-button ghost">Save as draft</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </main>
+                    <div class="input-group-sm mb-3">
+                        <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Keywords (comma-separated)</label>
+                        <input class="form-control form-control-lg" style="font-size: 12px;" asp-for="Keywords">
+                    </div>
                 </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="d-flex flex-column gap-3">
+                    <div class="card">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:14px;">Group members</h3>
+                        <p class="small-text mb-2">
+                            You're added automatically as <strong>Leader</strong>. Search for registered students to add as members,
+                            or type a name for a member without an account — they can be linked later.
+                        </p>
+
+                        <div class="input-group-sm mb-3" style="position: relative;">
+                            <label class="form-label" style="font-size: 12px; color: var(--ink-900);">Add member</label>
+                            <div class="d-flex gap-2">
+                                <input class="form-control form-control-lg" style="font-size: 12px;"
+                                       id="memberSearchInput" placeholder="Search registered students or type a name" autocomplete="off">
+                                <button type="button" id="btnAddTyped" class="btn ghost sm" style="white-space:nowrap;">Add</button>
+                            </div>
+                            <div id="memberSuggestions" class="list-group" style="position:absolute; z-index: 10; width:100%; top: 60px; display:none; font-size:12px;"></div>
+                        </div>
+
+                        <div id="memberCardList">
+                            @if (leader != null)
+                            {
+                                <partial name="_Member_card" model="leader" />
+                            }
+                        </div>
+                        <div id="memberHiddenInputs"></div>
+                    </div>
+
+                    <div class="card d-flex flex-column gap-2">
+                        <button class="form-button gold" type="submit" name="Status" value="Pending" id="btnSubmitReview">Submit for review</button>
+                        <button class="form-button ghost" type="submit" name="Status" value="Draft" id="btnSaveDraft">Save as draft</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+(function () {
+    let memberIndex = 0;
+    const addedStudentIds = new Set();
+    const searchInput = document.getElementById('memberSearchInput');
+    const suggestionsBox = document.getElementById('memberSuggestions');
+    const cardList = document.getElementById('memberCardList');
+    const hiddenInputs = document.getElementById('memberHiddenInputs');
+    const btnAddTyped = document.getElementById('btnAddTyped');
+    let debounceTimer = null;
+
+    function renderMemberCard(name, role, hasAccount) {
+        const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
+        const accountLabel = hasAccount
+            ? '<span class="text-success fw-semibold" style="font-size: 12px;">Account</span>'
+            : '<span class="fw-semibold" style="font-size: 12px; color:#b8860b;">No account</span>';
+
+        const div = document.createElement('div');
+        div.className = 'd-flex align-items-center justify-content-between py-2';
+        div.style.fontSize = '13px';
+        div.style.borderBottom = '1px solid var(--line)';
+        div.innerHTML = `
+            <div class="d-flex align-items-center" style="gap: 10px;">
+                <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center"
+                     style="width:32px;height:32px;">${initials}</div>
+                <div>
+                    <div class="fw-semibold text-capitalize">${name.toLowerCase()}</div>
+                    <small style="font-size: 10px; opacity: 0.75;">${role}</small>
+                </div>
+            </div>
+            ${accountLabel}
+        `;
+        return div;
+    }
+
+    function addMember(studentId, fullName) {
+        if (!fullName || !fullName.trim()) return;
+        if (studentId && addedStudentIds.has(studentId)) return;
+        if (studentId) addedStudentIds.add(studentId);
+
+        cardList.appendChild(renderMemberCard(fullName.trim(), 'Member', !!studentId));
+
+        const idx = memberIndex++;
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.name = `Members[${idx}].StudentId`;
+        idInput.value = studentId || '';
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'hidden';
+        nameInput.name = `Members[${idx}].MemberName`;
+        nameInput.value = fullName.trim();
+
+        hiddenInputs.appendChild(idInput);
+        hiddenInputs.appendChild(nameInput);
+
+        searchInput.value = '';
+        suggestionsBox.style.display = 'none';
+        suggestionsBox.innerHTML = '';
+    }
+
+    searchInput.addEventListener('input', function () {
+        const term = this.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (term.length < 2) {
+            suggestionsBox.style.display = 'none';
+            return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`/Student/SearchStudents?term=${encodeURIComponent(term)}`);
+                const students = await res.json();
+
+                suggestionsBox.innerHTML = '';
+
+                if (students.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    return;
+                }
+
+                students.forEach(s => {
+                    const item = document.createElement('button');
+                    item.type = 'button';
+                    item.className = 'list-group-item list-group-item-action';
+                    item.textContent = `${s.fullName} (${s.studentNo})`;
+                    item.addEventListener('click', () => addMember(s.studentId, s.fullName));
+                    suggestionsBox.appendChild(item);
+                });
+
+                suggestionsBox.style.display = 'block';
+            } catch (err) {
+                console.error('Student search failed', err);
+            }
+        }, 300);
+    });
+
+    // Press Enter to add the typed name directly
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const term = this.value.trim();
+            if (term.length > 0) {
+                addMember(null, term);
+            }
+        }
+    });
+
+    // Explicit Add button — covers the case where the user types a name
+    // and clicks "Add" instead of pressing Enter or picking a suggestion.
+    btnAddTyped.addEventListener('click', function () {
+        const term = searchInput.value.trim();
+        if (term.length > 0) {
+            addMember(null, term);
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+})();
+</script>
