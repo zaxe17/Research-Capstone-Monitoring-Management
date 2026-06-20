@@ -587,7 +587,6 @@ C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\rjsmcshtml.dsw
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\scopedcss\bundle\monitoring_management.styles.css
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\scopedcss\projectbundle\monitoring_management.bundle.scp.css
-C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\compressed\tzj6j06uh0-{0}-wpewbovamp-wpewbovamp.gz
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\compressed\bfalj2siwo-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\compressed\r00i152qx7-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\compressed\gndtzts41w-{0}-t1cqhe9u97-t1cqhe9u97.gz
@@ -662,3 +661,4 @@ C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\refint\monitor
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\monitoring_management.pdb
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\monitoring_management.genruntimeconfig.cache
 C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\ref\monitoring_management.dll
+C:\ADET\Research-Capstone-Monitoring-Management\obj\Debug\net10.0\compressed\tzj6j06uh0-{0}-nh7e8q4mag-nh7e8q4mag.gz

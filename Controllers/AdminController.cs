@@ -64,44 +64,26 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusRequest request)
     {
-        // DIAGNOSTIC: confirm which physical DB/schema this DbContext is actually hitting.
-        var dbName = _context.Database.GetDbConnection().Database;
-        var dataSource = _context.Database.GetDbConnection().DataSource;
-        _logger.LogInformation("[UpdateStatus] Connected DB={DbName} Source={DataSource} IncomingId='{Id}' Status='{Status}'",
-            dbName, dataSource, request.Id, request.Status);
-
         if (string.IsNullOrWhiteSpace(request.Id))
         {
-            _logger.LogWarning("[UpdateStatus] Empty/null Id received.");
             return BadRequest("Missing paper id.");
         }
 
         if (!Enum.TryParse<PaperStatus>(request.Status, true, out var status))
         {
-            _logger.LogWarning("[UpdateStatus] Invalid status value: '{Status}'", request.Status);
             return BadRequest("Invalid status value.");
         }
 
-        var trimmedId = request.Id.Trim();
-
-        var paper = await _context.ResearchPapers
-            .FirstOrDefaultAsync(p => p.PaperId == trimmedId);
-
+        var paper = await _context.ResearchPapers.FindAsync(request.Id.Trim());
         if (paper == null)
         {
-            _logger.LogWarning("[UpdateStatus] No paper found in DB '{DbName}' with PaperId='{Id}'", dbName, trimmedId);
-            return NotFound($"No paper found with id '{trimmedId}' in database '{dbName}'.");
+            return NotFound();
         }
 
-        var oldStatus = paper.Status;
         paper.Status = status;
+        await _context.SaveChangesAsync();
 
-        var rows = await _context.SaveChangesAsync();
-
-        _logger.LogInformation("[UpdateStatus] PaperId={Id} {OldStatus} -> {NewStatus} | RowsAffected={Rows} | DB={DbName}",
-            trimmedId, oldStatus, status, rows, dbName);
-
-        return Ok(new { rowsAffected = rows, db = dbName, paperId = trimmedId, newStatus = status.ToString() });
+        return Ok();
     }
 
     // FIX: dati Approved-only ang query at may year filter. Ngayon lahat ng
@@ -174,20 +156,104 @@ public class AdminController : Controller
             return NotFound();
         }
 
-        // ResearchMember -> ResearchPaper FK has DeleteBehavior.Cascade configured
-        // in OnModelCreating; ResearchMembers is already tracked via Include, so
-        // EF cascades the delete automatically.
         _context.ResearchPapers.Remove(paper);
         await _context.SaveChangesAsync();
 
         return Ok();
     }
 
-    public async Task<IActionResult> ManageStudent()
+    // DB-driven Manage Students page.
+    // - LinkedPapersCount = distinct papers where student is uploader OR named member (display only).
+    // - HasUploadedPapers = the actual delete-block condition, since research_papers.uploaded_by
+    //   is a required (non-nullable) FK. Being a member-only (ResearchMembers.StudentId) does NOT
+    //   block delete, since that FK is nullable and gets unlinked instead.
+    public async Task<IActionResult> ManageStudent(string search, int page = 1)
     {
-        var sidebar = SidebarData.StudentMenu();
-        ViewBag.Sidebar = sidebar;
+        ViewBag.Sidebar = SidebarData.AdminMenu();
 
-        return View();
+        const int pageSize = 10;
+
+        var query = _context.Students
+            .Include(s => s.ResearchPapers)
+            .Include(s => s.ResearchMembers)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(s =>
+                s.FullName.Contains(search) ||
+                s.StudentNo.Contains(search) ||
+                s.Email.Contains(search));
+        }
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+        page = Math.Max(1, Math.Min(page, Math.Max(totalPages, 1)));
+
+        var students = await query
+            .OrderBy(s => s.FullName)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var rows = students.Select(s => new StudentRowViewModel
+        {
+            StudentId = s.StudentId,
+            StudentNo = s.StudentNo,
+            FullName = s.FullName,
+            Email = s.Email,
+            LinkedPapersCount = s.ResearchPapers.Select(p => p.PaperId)
+                .Union(s.ResearchMembers.Select(m => m.PaperId))
+                .Distinct()
+                .Count(),
+            HasUploadedPapers = s.ResearchPapers.Any()
+        }).ToList();
+
+        ViewBag.SearchTerm = search;
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
+
+        return View(rows);
+    }
+
+    public class DeleteStudentRequest
+    {
+        public string Id { get; set; } = string.Empty;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteStudent([FromBody] DeleteStudentRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Id))
+        {
+            return BadRequest("Missing student id.");
+        }
+
+        var studentId = request.Id.Trim();
+
+        var student = await _context.Students
+            .Include(s => s.ResearchPapers)
+            .Include(s => s.ResearchMembers)
+            .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+        if (student == null)
+        {
+            return NotFound();
+        }
+
+        if (student.ResearchPapers.Any())
+        {
+            return BadRequest("Cannot delete: student has uploaded research paper(s). Remove or reassign those papers first.");
+        }
+
+        foreach (var member in student.ResearchMembers)
+        {
+            member.StudentId = null;
+        }
+
+        _context.Students.Remove(student);
+        await _context.SaveChangesAsync();
+
+        return Ok();
     }
 }

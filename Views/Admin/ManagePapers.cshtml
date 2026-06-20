@@ -53,6 +53,7 @@
                         {
                             PaperStatus.Approved => "approved",
                             PaperStatus.Rejected => "rejected",
+                            PaperStatus.Draft => "draft",
                             _ => "pending"
                         };
 
@@ -78,14 +79,21 @@
                             </td>
 
                             <td>
-                                @* FIX: dati static "Approved" badge lang. Ngayon editable
-                                       dropdown na (tugma sa Index.cshtml pattern) para
-                                       talagang gumana ang approve/reject mula dito. *@
-                                <select class="badge @statusClass py-2 status-select border-0 cursor-pointer" data-paper-id="@paper.PaperId">
-                                    <option value="Approved" selected="@(paper.Status == PaperStatus.Approved)">Approved</option>
-                                    <option value="Rejected" selected="@(paper.Status == PaperStatus.Rejected)">Rejected</option>
-                                    <option value="Pending" selected="@(paper.Status == PaperStatus.Pending)">Pending</option>
-                                </select>
+                                @* Draft papers haven't been submitted for review yet, so they get a
+                                   plain non-editable badge instead of the Approve/Reject/Pending
+                                   dropdown — there's nothing for the admin to action on a Draft. *@
+                                @if (paper.Status == PaperStatus.Draft)
+                                {
+                                    <span class="badge draft py-2">Draft</span>
+                                }
+                                else
+                                {
+                                    <select class="badge @statusClass py-2 status-select border-0 cursor-pointer" data-paper-id="@paper.PaperId">
+                                        <option value="Approved" selected="@(paper.Status == PaperStatus.Approved)">Approved</option>
+                                        <option value="Rejected" selected="@(paper.Status == PaperStatus.Rejected)">Rejected</option>
+                                        <option value="Pending" selected="@(paper.Status == PaperStatus.Pending)">Pending</option>
+                                    </select>
+                                }
                             </td>
 
                             <td>

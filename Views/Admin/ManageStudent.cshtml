@@ -1,11 +1,15 @@
+@using monitoring_management.Models
+@model List<StudentRowViewModel>
+
 @{
     ViewData["Title"] = "Manage students Page";
+    var currentPage = (int)(ViewBag.CurrentPage ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
 }
 
 <div class="d-flex w-100 h-100">
     <partial name="_Sidebar" model="ViewBag.Sidebar" />
     <main class="flex-grow-1" style="padding: 30px;">
-        <!-- Header -->
         <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
                  {
                      ["TabName"] = "Admin module",
@@ -13,16 +17,20 @@
                      ["Description"] = "View student accounts and resolve unlinked research members."
                  }' />
 
-<!-- Search bar -->
-<div class="position-relative mb-4">
-            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
-            <input type="text" class="form-control ps-5" style="font-size: 14px;"
-                   placeholder="Search by name, student no., or email">
-        </div>
+        <form method="get" asp-action="ManageStudent" asp-controller="Admin">
+            <div class="position-relative mb-4">
+                <button type="submit" aria-label="Search"
+                        class="position-absolute top-50 start-0 translate-middle-y ms-3 p-0 border-0 bg-transparent text-secondary"
+                        style="cursor: pointer; z-index: 2;">
+                    <i class="ti ti-search"></i>
+                </button>
+                <input type="text" name="search" value="@ViewBag.SearchTerm" class="form-control ps-5" style="font-size: 14px;"
+                       placeholder="Search by name, student no., or email">
+            </div>
+        </form>
 
-        <!-- Table -->
         <div class="card" style="padding: 0;">
-            <table style="font-size: 13px;">
+            <table style="font-size: 13px;" id="studentsTable">
                 <thead>
                     <tr>
                         <th style="font-size: 10px; color: var(--ink-600);">STUDENT NO.</th>
@@ -30,73 +38,106 @@
                         <th style="font-size: 10px; color: var(--ink-600);">EMAIL</th>
                         <th style="font-size: 10px; color: var(--ink-600);">LINKED PAPERS</th>
                         <th style="font-size: 10px; color: var(--ink-600);">ACTIONS</th>
-                        <th style="font-size: 10px; color: var(--ink-600);"></th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @* <tr>
-                        <td colspan="6" class="text-center small-text py-4">No approved papers found.</td>
-                    </tr> *@
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center small-text py-4">No students found.</td>
+                        </tr>
+                    }
+                    @foreach (var student in Model)
+                    {
+                        <tr data-student-id="@student.StudentId">
+                            <td>
+                                <span class="title-cell">@student.StudentNo</span>
+                            </td>
 
-                    
-                    <tr>
-                        <td>
-                            <span class="title-cell">
-                                2021-00451-MN-0
-                            </span>
-                        </td>
+                            <td>@student.FullName</td>
 
-                        <td>
-                            Kel S. Gamayo
-                        </td>
+                            <td>@student.Email</td>
 
-                        <td>
-                            kel.gamayo@iskolarngbayan.pup.edu.ph
-                        </td>
+                            <td>@student.LinkedPapersCount</td>
 
-                        <td>
-                            2
-                        </td>
-
-                        <td>
-                            Delete
-                        </td>
-                    </tr>
-
+                            <td>
+                                <button type="button" class="btn ghost sm delete-student-btn"
+                                        style="font-size: 12px; color: var(--danger-600);"
+                                        data-student-id="@student.StudentId">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
-        @* @if (totalPages > 1)
+        @if (totalPages > 1)
         {
             <div class="d-flex justify-content-end mt-3">
                 <nav class="d-flex gap-2">
                     @if (currentPage > 1)
                     {
                         <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
-                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage - 1)">Previous</a>
+                           asp-action="ManageStudent" asp-controller="Admin"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-page="@(currentPage - 1)">Previous</a>
                     }
 
                     @for (int i = 1; i <= totalPages; i++)
                     {
                         <a class="form-button @(i == currentPage ? "" : "ghost")" style="padding:6px 14px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
-                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@i">@i</a>
+                           asp-action="ManageStudent" asp-controller="Admin"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-page="@i">@i</a>
                     }
 
                     @if (currentPage < totalPages)
                     {
                         <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
-                           asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage + 1)">Next</a>
+                           asp-action="ManageStudent" asp-controller="Admin"
+                           asp-route-search="@ViewBag.SearchTerm" asp-route-page="@(currentPage + 1)">Next</a>
                     }
                 </nav>
             </div>
-        } *@
+        }
     </main>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const table = document.getElementById('studentsTable');
+            if (!table) return;
+
+            table.addEventListener('click', async function (e) {
+                const btn = e.target.closest('.delete-student-btn');
+                if (!btn) return;
+
+                const studentId = btn.dataset.studentId;
+                if (!confirm('Are you sure you want to delete this student account? This action cannot be undone.')) return;
+
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('/Admin/DeleteStudent', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: studentId })
+                    });
+
+                    if (!res.ok) {
+                        const msg = await res.text();
+                        throw new Error(msg || 'Delete failed');
+                    }
+
+                    btn.closest('tr').remove();
+                } catch (err) {
+                    console.error('Delete failed', err);
+                    alert(err.message || 'Failed to delete student. Please try again.');
+                    btn.disabled = false;
+                }
+            });
+        })();
+    </script>
+}
