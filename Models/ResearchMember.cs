@@ -14,8 +14,8 @@ public class ResearchMember
     [Key]
     [Column("member_id")]
     [MaxLength(13)]  // MN-00000001 = 13 chars
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public string MemberId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int MemberId { get; set; }
 
     [Column("paper_id")]
     [Required]

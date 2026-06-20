@@ -299,12 +299,12 @@ public class StudentController : Controller
 
         var leaderMember = new ResearchMember
         {
-            MemberId   = string.Empty,
-            PaperId    = string.Empty,
-            StudentId  = student.StudentId,
-            Student    = student,
+            MemberId = 0,
+            PaperId = string.Empty,
+            StudentId = student.StudentId,
+            Student = student,
             MemberName = student.FullName,
-            Role       = MemberRole.Leader
+            Role = MemberRole.Leader
         };
 
         ViewBag.LeaderMember = leaderMember;
@@ -334,57 +334,94 @@ public class StudentController : Controller
             await SetCurrentPaperInfoAsync(studentId);
             ViewBag.Categories = await _context.Categories.OrderBy(c => c.CategoryName).ToListAsync();
             ViewBag.Years = GetAcademicYearOptions();
+
             ViewBag.LeaderMember = new ResearchMember
             {
-                StudentId  = student.StudentId,
-                Student    = student,
+                StudentId = student.StudentId,
+                Student = student,
                 MemberName = student.FullName,
-                Role       = MemberRole.Leader
+                Role = MemberRole.Leader
             };
+
             return View(model);
         }
 
         var status = model.Status == "Draft" ? "Draft" : "Pending";
 
-        await _context.Database.ExecuteSqlRawAsync(
-            @"INSERT INTO research_papers (title, description, keywords, category_id, year, uploaded_by, status)
-              VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
-            model.Title, model.Description, model.Keywords, model.CategoryId, model.Year, studentId, status);
-
-        var newPaperId = await _context.ResearchPapers
-            .Where(p => p.UploadedBy == studentId)
-            .OrderByDescending(p => p.DateUploaded)
+        // ================================
+        // ✅ SAFE PAPER ID GENERATION
+        // ================================
+        var lastPaper = await _context.ResearchPapers
+            .OrderByDescending(p => p.PaperId)
             .Select(p => p.PaperId)
             .FirstOrDefaultAsync();
 
-        if (!string.IsNullOrEmpty(newPaperId))
+        int nextNumber = 1;
+
+        if (!string.IsNullOrEmpty(lastPaper) && lastPaper.StartsWith("PN-"))
         {
-            await _context.Database.ExecuteSqlRawAsync(
-                @"INSERT INTO research_members (paper_id, student_id, member_name, role)
-                  VALUES ({0}, {1}, {2}, {3})",
-                newPaperId, studentId, student.FullName, "Leader");
+            int.TryParse(lastPaper.Substring(3), out nextNumber);
+            nextNumber++;
+        }
 
-            if (model.Members != null)
+        var newPaperId = $"PN-{nextNumber:D8}";
+
+        // ================================
+        // INSERT PAPER
+        // ================================
+        await _context.Database.ExecuteSqlRawAsync(
+            @"INSERT INTO research_papers 
+            (paper_id, title, description, keywords, category_id, year, uploaded_by, status, date_uploaded)
+            VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, NOW())",
+            newPaperId,
+            model.Title,
+            model.Description,
+            model.Keywords,
+            model.CategoryId,
+            model.Year,
+            studentId,
+            status
+        );
+
+        // ================================
+        // INSERT LEADER
+        // ================================
+        await _context.Database.ExecuteSqlRawAsync(
+            @"INSERT INTO research_members 
+        (paper_id, student_id, member_name, role)
+        VALUES ({0}, {1}, {2}, {3})",
+            newPaperId,
+            student.StudentId,
+            student.FullName,
+            "Leader"
+        );
+
+        // ================================
+        // INSERT MEMBERS
+        // ================================
+        if (model.Members != null)
+        {
+            foreach (var m in model.Members)
             {
-                foreach (var m in model.Members)
-                {
-                    if (string.IsNullOrWhiteSpace(m.MemberName))
-                        continue;
+                if (string.IsNullOrWhiteSpace(m.MemberName))
+                    continue;
 
-                    await _context.Database.ExecuteSqlRawAsync(
-                        @"INSERT INTO research_members (paper_id, student_id, member_name, role)
-                          VALUES ({0}, NULLIF({1}, ''), {2}, {3})",
-                        newPaperId,
-                        m.StudentId ?? string.Empty,
-                        m.MemberName,
-                        "Member");
-                }
+                await _context.Database.ExecuteSqlRawAsync(
+                    @"INSERT INTO research_members 
+                (paper_id, student_id, member_name, role)
+                VALUES ({0}, NULLIF({1}, ''), {2}, {3})",
+                    newPaperId,
+                    m.StudentId ?? string.Empty,
+                    m.MemberName,
+                    "Member"
+                );
             }
         }
 
-        TempData["SuccessMessage"] = status == "Draft"
-            ? "Saved as draft."
-            : "Research submitted for review.";
+        TempData["SuccessMessage"] =
+            status == "Draft"
+                ? "Saved as draft."
+                : "Research submitted for review.";
 
         return RedirectToAction("MyWorks");
     }
@@ -405,7 +442,7 @@ public class StudentController : Controller
             .Select(s => new
             {
                 studentId = s.StudentId,
-                fullName  = s.FullName,
+                fullName = s.FullName,
                 studentNo = s.StudentNo
             })
             .ToListAsync();

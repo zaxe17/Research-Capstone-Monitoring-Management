@@ -4,7 +4,81 @@
 
 <div class="d-flex w-100 h-100">
     <partial name="_Sidebar" model="ViewBag.Sidebar" />
-    <main class="flex-grow-1 p-4">
-        
+    <main class="flex-grow-1" style="padding: 30px;">
+        @* Header *@
+        <div class="d-flex justify-content-between align-items-start">
+            <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                     {
+                         ["TabName"] = "My works",
+                         ["Content"] = "Your capstone submissions",
+                         ["Description"] = "Papers where you are listed as a leader or member."
+                     }' />
+</div>
+
+        <!-- Status -->
+        <div class="mb-4 d-flex justify-content-center gap-2 w-100">
+            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Total papers" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Pending review" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Approved" }' />
+            <partial name="_Statcard" model='new StatCardModel { Number = 0, Label = "Rejected" }' />
+        </div>
+
+        <!-- Table -->
+        <h3 style="font-size:14px; font-weight:600;">Pending submissions</h3>
+        <div class="card" style="padding: 0;">
+            <table style="font-size: 13px;">
+                <thead>
+                    <tr>
+                        <th style="font-size: 10px; color: var(--ink-600);">TITLE</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">Submitted by</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">CATEGORY</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">DATE</th>
+                        <th style="font-size: 10px; color: var(--ink-600);">STATUS</th>
+                        <th style="font-size: 10px; color: var(--ink-600);"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <div class="title-cell">
+                                HiveTrack: IoT-Based Hive Health Monitoring System
+                            </div>
+                        </td>
+
+                        <td>
+                            K. Gamayo
+                        </td>
+
+                        <td>
+                            IoT / Embedded Systems
+                        </td>
+
+                        <td>
+                            May 2, 2026
+                        </td>
+
+                        <td>
+                            <select class="badge approved py-2">
+                                <option value="Approved">Approved</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            @* FIX: dati'y onclick="showView('paperDetails')" — JS function na
+                                   walang depinisyon sa actual app, kaya hindi gumagana ang button.
+                                   Ngayon, totoong link na patungo sa PaperDetails action. *@
+                            <a class="btn ghost sm" style="font-size: 12px;">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
     </main>
 </div>
