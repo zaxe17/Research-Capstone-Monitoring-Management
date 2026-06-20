@@ -20,101 +20,105 @@ build_property.TargetFrameworkVersion = v10.0
 build_property.EntryPointFilePath = 
 build_property.RootNamespace = monitoring_management
 build_property.RootNamespace = monitoring_management
-build_property.ProjectDir = D:\Projects\.net\monitoring_management\
+build_property.ProjectDir = C:\ADET\Research-Capstone-Monitoring-Management\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\Projects\.net\monitoring_management
+build_property.MSBuildProjectDirectory = C:\ADET\Research-Capstone-Monitoring-Management
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/Projects/.net/monitoring_management/Views/Admin/Index.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Admin/ManagePapers.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Admin/ManagePapers.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlUGFwZXJzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Login/Index.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Admin/_AdminSearchbar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cX0FkbWluU2VhcmNoYmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Login/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Register/Index.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Register/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0ZXJcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Repository/Details.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Repository/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3NpdG9yeVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Repository/Index.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Repository/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3NpdG9yeVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/Error.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Header_page.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Header_page.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9IZWFkZXJfcGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Member_card.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Member_card.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9NZW1iZXJfY2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Navbar.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Navbar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9OYXZiYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Searchbar.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Searchbar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TZWFyY2hiYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Sidebar.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Sidebar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TaWRlYmFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Statcard.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Statcard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TdGF0Y2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Student/Edit_submit.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Student/Edit_submit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxFZGl0X3N1Ym1pdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Student/Index.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Student/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Student/MyWorks.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Student/MyWorks.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxNeVdvcmtzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Student/PaperDetails.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Student/PaperDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxQYXBlckRldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Student/Submit.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Student/Submit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxTdWJtaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/_ViewImports.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/_ViewStart.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projects/.net/monitoring_management/Views/Shared/_Layout.cshtml]
+[C:/ADET/Research-Capstone-Monitoring-Management/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-p1ofj7iaru

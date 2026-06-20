@@ -1,5 +1,10 @@
+@using monitoring_management.Models
+@model List<ResearchPaper>
+
 @{
     ViewData["Title"] = "Manage Papers Page";
+    var currentPage = (int)(ViewBag.CurrentPage ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
 }
 
 <div class="d-flex w-100 h-100">
@@ -13,14 +18,14 @@
                      ["Description"] = "Review, approve, reject, edit, or remove research submissions."
                  }' />
 
-<!-- Search bar -->
-<form method="get" asp-action="Index" asp-controller="Student">
-            <partial name="_Searchbar" />
+        <!-- Search bar -->
+        <form method="get" asp-action="ManagePapers" asp-controller="Admin">
+            <partial name="_AdminSearchbar" />
         </form>
 
         <!-- Table -->
         <div class="card" style="padding: 0;">
-            <table style="font-size: 13px;">
+            <table style="font-size: 13px;" id="papersTable">
                 <thead>
                     <tr>
                         <th style="font-size: 10px; color: var(--ink-600);">TITLE</th>
@@ -33,76 +38,160 @@
                 </thead>
 
                 <tbody>
-                    @* <tr>
-                        <td colspan="6" class="text-center small-text py-4">No approved papers found.</td>
-                    </tr> *@
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center small-text py-4">No submissions found.</td>
+                        </tr>
+                    }
+                    @foreach (var paper in Model)
+                    {
+                        var leader = paper.ResearchMembers.FirstOrDefault(m => m.Role == MemberRole.Leader);
+                        var uploadedBy = leader?.MemberName ?? paper.Student?.FullName ?? "—";
 
-                    
-                    <tr>
-                        <td>
-                            <span class="title-cell">
-                                BeeGuard: A Crowdsourced Mobile Platform for Native Bee Conservation...
-                            </span>
-                        </td>
+                        var statusClass = paper.Status switch
+                        {
+                            PaperStatus.Approved => "approved",
+                            PaperStatus.Rejected => "rejected",
+                            _ => "pending"
+                        };
 
-                        <td>
-                            <span class="cat-pill">
-                                Mobile Application
-                            </span>
-                        </td>
+                        <tr data-paper-id="@paper.PaperId">
+                            <td>
+                                <span class="title-cell">
+                                    @paper.Title
+                                </span>
+                            </td>
 
-                        <td>
-                            2026
-                        </td>
+                            <td>
+                                <span class="cat-pill">
+                                    @(paper.Category?.CategoryName ?? "Uncategorized")
+                                </span>
+                            </td>
 
-                        <td>
-                            K. Gamayo
-                        </td>
+                            <td>
+                                @paper.Year
+                            </td>
 
-                        <td>
-                            <span class="badge approved py-2">
-                                Approved
-                            </span>
-                        </td>
+                            <td>
+                                @uploadedBy
+                            </td>
 
-                        <td>
-                            Delete
-                        </td>
-                    </tr>
+                            <td>
+                                @* FIX: dati static "Approved" badge lang. Ngayon editable
+                                       dropdown na (tugma sa Index.cshtml pattern) para
+                                       talagang gumana ang approve/reject mula dito. *@
+                                <select class="badge @statusClass py-2 status-select border-0 cursor-pointer" data-paper-id="@paper.PaperId">
+                                    <option value="Approved" selected="@(paper.Status == PaperStatus.Approved)">Approved</option>
+                                    <option value="Rejected" selected="@(paper.Status == PaperStatus.Rejected)">Rejected</option>
+                                    <option value="Pending" selected="@(paper.Status == PaperStatus.Pending)">Pending</option>
+                                </select>
+                            </td>
 
+                            <td>
+                                <button type="button" class="btn ghost sm delete-paper-btn"
+                                        style="font-size: 12px; color: var(--danger-600);"
+                                        data-paper-id="@paper.PaperId">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
-        @* @if (totalPages > 1)
+        @if (totalPages > 1)
         {
             <div class="d-flex justify-content-end mt-3">
                 <nav class="d-flex gap-2">
                     @if (currentPage > 1)
                     {
                         <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
+                           asp-action="ManagePapers" asp-controller="Admin"
                            asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage - 1)">Previous</a>
+                           asp-route-status="@ViewBag.SelectedStatus" asp-route-page="@(currentPage - 1)">Previous</a>
                     }
 
                     @for (int i = 1; i <= totalPages; i++)
                     {
                         <a class="form-button @(i == currentPage ? "" : "ghost")" style="padding:6px 14px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
+                           asp-action="ManagePapers" asp-controller="Admin"
                            asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@i">@i</a>
+                           asp-route-status="@ViewBag.SelectedStatus" asp-route-page="@i">@i</a>
                     }
 
                     @if (currentPage < totalPages)
                     {
                         <a class="form-button ghost" style="padding:6px 16px; font-size:12px;"
-                           asp-action="Index" asp-controller="Student"
+                           asp-action="ManagePapers" asp-controller="Admin"
                            asp-route-search="@ViewBag.SearchTerm" asp-route-category="@ViewBag.SelectedCategory"
-                           asp-route-year="@ViewBag.SelectedYear" asp-route-page="@(currentPage + 1)">Next</a>
+                           asp-route-status="@ViewBag.SelectedStatus" asp-route-page="@(currentPage + 1)">Next</a>
                     }
                 </nav>
             </div>
-        } *@
+        }
     </main>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const table = document.getElementById('papersTable');
+            if (!table) return;
+
+            table.addEventListener('change', async function (e) {
+                const select = e.target.closest('.status-select');
+                if (!select) return;
+
+                const paperId = select.dataset.paperId;
+                const newStatus = select.value;
+                const oldClassMatch = select.className.match(/\b(approved|rejected|pending)\b/);
+                const oldClass = oldClassMatch ? oldClassMatch[0] : 'pending';
+
+                try {
+                    const res = await fetch('/Admin/UpdateStatus', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: paperId, status: newStatus })
+                    });
+
+                    if (!res.ok) throw new Error('Update failed');
+
+                    select.classList.remove(oldClass);
+                    select.classList.add(newStatus.toLowerCase());
+                } catch (err) {
+                    console.error('Status update failed', err);
+                    alert('Hindi na-update ang status. Subukan ulit.');
+                    select.value = oldClass.charAt(0).toUpperCase() + oldClass.slice(1);
+                }
+            });
+
+            table.addEventListener('click', async function (e) {
+                const btn = e.target.closest('.delete-paper-btn');
+                if (!btn) return;
+
+                const paperId = btn.dataset.paperId;
+                if (!confirm('Tanggalin ang paper na ito? Hindi na ito mababawi.')) return;
+
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('/Admin/DeletePaper', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: paperId })
+                    });
+
+                    if (!res.ok) throw new Error('Delete failed');
+
+                    btn.closest('tr').remove();
+                } catch (err) {
+                    console.error('Delete failed', err);
+                    alert('Hindi natanggal ang paper. Subukan ulit.');
+                    btn.disabled = false;
+                }
+            });
+        })();
+    </script>
+}
