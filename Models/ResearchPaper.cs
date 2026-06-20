@@ -37,10 +37,6 @@ public class ResearchPaper
     [Column("year")]
     public int Year { get; set; }
 
-    [Column("file_path")]
-    [MaxLength(255)]
-    public string? FilePath { get; set; }
-
     [Column("uploaded_by")]
     [Required]
     [MaxLength(13)]  // FK to students(student_id)
