@@ -1,8 +1,17 @@
-@model monitoring_management.Models.Student
+@model monitoring_management.Models.ResearchMember
 
 @{
-    var initials = string.Join("", Model.FullName.Split(' ')
+    var displayName = Model.Student != null
+        ? Model.Student.FullName
+        : (!string.IsNullOrWhiteSpace(Model.MemberName) ? Model.MemberName : "Unknown member");
+
+    var initials = string.Join("", displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
         .Take(2).Select(w => w[0].ToString().ToUpper()));
+
+    if (string.IsNullOrEmpty(initials))
+        initials = "?";
+
+    var hasAccount = Model.StudentId != null;
 }
 
 <div class="d-flex align-items-center justify-content-between py-2" style="font-size: 13px; border-bottom: 1px solid var(--line);">
@@ -12,10 +21,17 @@
             @initials
         </div>
         <div>
-            <div class="fw-semibold text-capitalize">@Model.FullName.ToLower()</div>
-            <small style="font-size: 10px; opacity: 0.75;">@ViewBag.MemberRole</small>
+            <div class="fw-semibold text-capitalize">@displayName.ToLower()</div>
+            <small style="font-size: 10px; opacity: 0.75;">@Model.Role</small>
         </div>
     </div>
 
-    <span class="text-success fw-semibold" style="font-size: 12px;">Account</span>
+    @if (hasAccount)
+    {
+        <span class="text-success fw-semibold" style="font-size: 12px;">Account</span>
+    }
+    else
+    {
+        <span class="fw-semibold" style="font-size: 12px; color:#b8860b;">No account</span>
+    }
 </div>

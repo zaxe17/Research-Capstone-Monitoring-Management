@@ -6,12 +6,18 @@
     <partial name="_Sidebar" model="ViewBag.Sidebar" />
     <main class="flex-grow-1" style="padding: 30px;">
         @* Header *@
-        <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
-                 {
-                     ["TabName"] = "My works",
-                     ["Content"] = "Your capstone submissions",
-                     ["Description"] = "Papers where you are listed as a leader or member."
-                 }' />
+        <div class="d-flex justify-content-between align-items-start">
+            <partial name="_Header_page" view-data='new ViewDataDictionary(ViewData)
+                     {
+                         ["TabName"] = "My works",
+                         ["Content"] = "Your capstone submissions",
+                         ["Description"] = "Papers where you are listed as a leader or member."
+                     }' />
+
+            <a class="form-button gold" style="white-space: nowrap;" asp-controller="Student" asp-action="Submit">
+                New submission
+            </a>
+        </div>
 
         <!-- Status -->
         <div class="mb-4 d-flex justify-content-center gap-2 w-100">
@@ -67,9 +73,13 @@
                             </td>
 
                             <td>
-                                <button class="btn ghost sm" style="font-size: 12px;" onclick="showView('paperDetails')">
+                                @* FIX: dati'y onclick="showView('paperDetails')" — JS function na
+                                   walang depinisyon sa actual app, kaya hindi gumagana ang button.
+                                   Ngayon, totoong link na patungo sa PaperDetails action. *@
+                                <a class="btn ghost sm" style="font-size: 12px;"
+                                   asp-controller="Student" asp-action="PaperDetails" asp-route-id="@paper.PaperId">
                                     View
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     }

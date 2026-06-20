@@ -5,6 +5,7 @@ namespace monitoring_management.Models;
 
 public enum PaperStatus
 {
+    Draft,
     Pending,
     Approved,
     Rejected
@@ -14,7 +15,7 @@ public class ResearchPaper
 {
     [Key]
     [Column("paper_id")]
-    [MaxLength(11)]
+    [MaxLength(13)]  // PN-00000001 = 13 chars
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public string PaperId { get; set; }
 
@@ -42,7 +43,7 @@ public class ResearchPaper
 
     [Column("uploaded_by")]
     [Required]
-    [MaxLength(11)]
+    [MaxLength(13)]  // FK to students(student_id)
     public string UploadedBy { get; set; }
 
     [Column("status")]
@@ -51,7 +52,11 @@ public class ResearchPaper
     [Column("date_uploaded")]
     public DateTime DateUploaded { get; set; } = DateTime.Now;
 
+    [ForeignKey("UploadedBy")]
     public Student? Student { get; set; }
+
+    [ForeignKey("CategoryId")]
     public Category? Category { get; set; }
+
     public ICollection<ResearchMember> ResearchMembers { get; set; } = new List<ResearchMember>();
 }
